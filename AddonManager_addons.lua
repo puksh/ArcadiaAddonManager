@@ -65,7 +65,13 @@ function tab_addons.ShowButton(index, basename)
 
     local catname = AddonManager.L.CAT[addon.category]
     if AddonManager_Settings.ShowSlashCmdInsteadOfCat then
-        catname = addon.slashCommands
+        -- Check both slashCommands (plural) and slashCommand (singular)
+        local cmd = addon.slashCommands or addon.slashCommand
+        if cmd and cmd ~= "" then
+            catname = cmd
+        else
+            catname = AddonManager.L.NoCommand
+        end
     end
 
     local minibutton= nil

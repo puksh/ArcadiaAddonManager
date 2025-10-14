@@ -29,6 +29,8 @@ lang["TIP_CMD"] = "Komenda: "
 lang["TIP_DEVS"] = "Stworzone przez "
 lang["TIP_MinimapButton"] = "Przycisk Minimapy"
 lang["TIP_TRANSLATOR"] = "Przetłumaczone przez "
+lang["NoCommand"] = "Brak komendy"
+
 lang.CAT = {
 	Crafting = "Rzemiosło",
 	Development = "Zarządzanie",

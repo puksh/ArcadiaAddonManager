@@ -466,10 +466,16 @@ function AddonManager.ShowTooltipOfAddon(btn,addon)
     if addon.description then
         GameTooltip:AddLine(addon.description,0,0.66,1)
     end
-    if addon.slashCommands or addon.author then
+    
+    -- Check for slash commands (both plural and singular property names)
+    local slashCmd = addon.slashCommands or addon.slashCommand
+    
+    if slashCmd or addon.author then
         GameTooltip:AddLine(" ")
-        if addon.slashCommands then
-            GameTooltip:AddLine(AddonManager.L.TIP_CMD.."|cff00ff00"..addon.slashCommands.."|r",0,0.66,1)
+        if slashCmd and slashCmd ~= "" then
+            GameTooltip:AddLine(AddonManager.L.TIP_CMD.."|cff00ff00"..slashCmd.."|r",0,0.66,1)
+        else
+            GameTooltip:AddLine(AddonManager.L.TIP_CMD.."|cffaaaaaa"..AddonManager.L.NoCommand.."|r",0,0.66,1)
         end
         if addon.author then
             GameTooltip:AddLine(AddonManager.L.TIP_DEVS..addon.author, 0.5, 0.5, 0.5)

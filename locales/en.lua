@@ -27,6 +27,8 @@ return {
     TIP_CMD = "Slash command: ",
     TIP_DEVS = "Made by ",
     TIP_TRANSLATOR = "Translated by ",
+    
+    NoCommand = "No command",
 
     CAT=
     {

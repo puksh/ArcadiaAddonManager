@@ -29,6 +29,7 @@ lang["TIP_CMD"] = "Slash Kommando: "
 lang["TIP_DEVS"] = "Entwickelt von "
 lang["TIP_MinimapButton"] = "Minimap Button"
 lang["TIP_TRANSLATOR"] = "Übersetzung von "
+lang["NoCommand"] = "Kein Befehl"
 lang.CAT = {
 	Crafting = "Berufe",
 	Development = "Entwicklung",
