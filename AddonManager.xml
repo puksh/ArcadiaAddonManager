@@ -515,23 +515,9 @@
 							</Layer>
 						</Layers>
 					</CheckButton>
-					<CheckButton name="AddonManagerConfig_ToggleShowMinimapButton" inherits="UIPanelCheckButtonTemplate">
-						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="AddonManagerConfig_ToggleShowSlashCmdInsteadOfCat" relativePoint="TOPLEFT">
-								<Offset>
-									<AbsDimension x="0" y="25"/>
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<Layers>
-							<Layer>
-								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
-							</Layer>
-						</Layers>
-					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleClassBasedEnable" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="AddonManagerConfig_ToggleShowMinimapButton" relativePoint="TOPLEFT">
+							<Anchor point="TOPLEFT" relativeTo="AddonManagerConfig_ToggleShowSlashCmdInsteadOfCat" relativePoint="TOPLEFT">
 								<Offset>
 									<AbsDimension x="0" y="25"/>
 								</Offset>

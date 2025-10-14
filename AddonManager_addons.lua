@@ -136,6 +136,7 @@ local FIXED_NAMES={
     ["MinimapFramePlusButton"] = "Minimap Zoom+",
     ["MinimapFrameMinusButton"] = "Minimap Zoom-",
     ["MinimapFrameTopupButton"] = "Dia-Shop",
+    ["AddonManagerMinimapButton"] = "AddonManager",
 }
 
 local MANUAL_FRAMES={
@@ -150,6 +151,7 @@ local MANUAL_FRAMES={
     ["MinimapFrameTopupButton"] = true,
 
     -- Addons
+    ["AddonManagerMinimapButton"] = true,
     ["LootIt_MinimapButton"] = true,
     ["Ikarus_MinimapButton"] = true,
     ["TitleSelectMinimapButton"] = true,

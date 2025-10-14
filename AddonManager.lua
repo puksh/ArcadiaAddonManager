@@ -59,7 +59,6 @@ local DefaultSettings = {
     ShowOnlyNamesInMiniBar = true,
     ShowSlashCmdInsteadOfCat = false,
     ShowMiniBarBorder = true,
-    ShowMinimapButton = false,
     AutoHideMiniBar = false,
     LockMiniBar = false,
     CharBasedEnable = true,
@@ -279,7 +278,6 @@ local function LocalizeSettingPage()
     AddonManagerFramePageSettingsMiniCategoryLabel:SetText(AddonManager.L["SETTING_MiniCategory"])
     AddonManagerConfig_ToggleMovePassiveToBackLabel:SetText(AddonManager.L["SETTING_MovePassiveToBack"])
     AddonManagerConfig_ToggleShowSlashCmdInsteadOfCatLabel:SetText(AddonManager.L["SETTING_ShowSlashCmdInsteadOfCat"])
-    AddonManagerConfig_ToggleShowMinimapButtonLabel:SetText(AddonManager.L["SETTING_ShowMinimapButton"])
     AddonManagerConfig_ToggleClassBasedEnableLabel:SetText(AddonManager.L["SETTING_CharBasedEnable"])
 
     AddonManagerConfig_ToggleShowMiniBarLabel:SetText(AddonManager.L["SETTING_ShowMiniBar"])
@@ -320,6 +318,10 @@ end
 function AddonManager.VARIABLES_LOADED()
 
     AddonManager_Settings = Nyx.TableMerge(AddonManager_Settings, DefaultSettings)
+    
+    -- Remove obsolete settings that have been moved elsewhere
+    AddonManager_Settings.ShowMinimapButton = nil
+    
     SaveVariables("AddonManager_Settings")
     SaveVariables("AddonManager_UncheckedAddons")
     SaveVariables("AddonManager_MinimapButtons")
@@ -398,7 +400,14 @@ end
 function AddonManager.RecheckSettings()
     AddonManager.Mini.Show(AddonManager_Settings.ShowMiniBar)
 
-    Nyx.SetVisible(AddonManagerMinimapButton, AddonManager_Settings.ShowMinimapButton)
+    -- AddonManagerMinimapButton visibility is now controlled via the Minimap-Buttons tab
+    -- cleanup code for updating
+    local isVisible = AddonManager_MinimapButtons["AddonManagerMinimapButton"]
+    if isVisible == nil then
+        isVisible = false  -- Default to hidden
+    end
+    -- end of cleanup code
+    Nyx.SetVisible(AddonManagerMinimapButton, isVisible)
 end
 
 function AddonManager.MinimapButton_OnClick(this)

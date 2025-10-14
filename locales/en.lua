@@ -13,7 +13,6 @@ return {
     SETTING_MiniCategory = "Mini-Addon Bar",
     SETTING_MovePassiveToBack = "Sort passive addons to the back of the list",
     SETTING_ShowSlashCmdInsteadOfCat = "Show slash command instead of category",
-    SETTING_ShowMinimapButton = "Show AddonManager minimap button",
     SETTING_ShowMiniBar = "Show the Mini-Addon bar",
     SETTING_ShowOnlyNamesInMiniBar = "Show only names in the Mini-Addon bar",
     SETTING_ShowMiniBarBorder = "Show Mini-Addon bar border",

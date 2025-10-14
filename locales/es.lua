@@ -20,7 +20,6 @@ lang["SETTING_MiniCategory"] = "Minibarra de complementos" -- Needs review
 lang["SETTING_MovePassiveToBack"] = "Enviar complementos pasivos al final de la lista" -- Needs review
 lang["SETTING_ShowMiniBar"] = "Mostrar la Minibarra de complementos" -- Needs review
 lang["SETTING_ShowMiniBarBorder"] = "Mostrar el borde de la Minibarra de complementos" -- Needs review
-lang["SETTING_ShowMinimapButton"] = "Mostrar botón Gestor de complementos en el minimapa" -- Needs review
 lang["SETTING_ShowOnlyNamesInMiniBar"] = "Mostrar sólo nombres en la Minibarra de Complementos" -- Needs review
 lang["SETTING_ShowSlashCmdInsteadOfCat"] = "Mostrar comando (/) barra en vez de categoría" -- Needs review
 lang["TAB_Addons"] = "Todos los complementos" -- Needs review
