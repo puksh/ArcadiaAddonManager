@@ -88,7 +88,7 @@ local function GetKeyName()
     return string.format("%s:%s:%s",tostring(realm),tostring(mainClass),tostring(secondClass))
 end
 
-local function SetAddonEnabled(name, enabled)
+function AddonManager.SetAddonEnabled(name, enabled)
     local key = GetKeyName()
     if enabled then
         if AddonManager_DisabledAddons[key] then

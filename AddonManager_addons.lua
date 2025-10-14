@@ -131,10 +131,10 @@ function tab_addons.OnCheckEnableBtn(index, is_checked)
     if not addon then return end
     
     if is_checked then
-        SetAddonEnabled(addon.name, true)
+        AddonManager.SetAddonEnabled(addon.name, true)
         addon.enableScript()
     else
-        SetAddonEnabled(addon.name, false)
+        AddonManager.SetAddonEnabled(addon.name, false)
         addon.disableScript()
     end
 end
