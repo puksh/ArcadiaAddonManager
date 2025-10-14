@@ -14,11 +14,11 @@ function AddonManager.GetAddonAtIndex(id)
         return AddonManager.Addons[num]
     else
         filter = AddonManager.Categories[filter - 1]
-        local count = 1
+        local count = 0
         for _, addon in pairs(AddonManager.Addons) do
             if addon.category == filter then
                 count = count + 1
-                if count > num then
+                if count == num then
                     return addon
                 end
             end
@@ -27,21 +27,36 @@ function AddonManager.GetAddonAtIndex(id)
 end
 
 function tab_addons.GetCount()
-    return #AddonManager.Addons
+    local filter = UIDropDownMenu_GetSelectedID(AddonManagerCategoryFilter)
+    if filter == 1 then  -- All
+        return #AddonManager.Addons
+    else
+        filter = AddonManager.Categories[filter - 1]
+        local count = 0
+        for _, addon in pairs(AddonManager.Addons) do
+            if addon.category == filter then
+                count = count + 1
+            end
+        end
+        return count
+    end
 end
 
 function tab_addons.OnShow()
     table.sort(AddonManager.Addons, AddonManager.AddonSortFn)
     AddonManager.UpdateButtons()
     AddonManagerFramePageAddons:Show()
+    Nyx.SetVisible(AddonManagerCategoryFilter, true)
 end
 
 function tab_addons.OnHide()
     AddonManagerFramePageAddons:Hide()
+    Nyx.SetVisible(AddonManagerCategoryFilter, false)
 end
 
 function tab_addons.ShowButton(index, basename)
-    local addon = AddonManager.Addons[index]
+    -- Get the addon using the filtered index
+    local addon = AddonManager.GetAddonAtIndex(index)
 
     local catname = AddonManager.L.CAT[addon.category]
     if AddonManager_Settings.ShowSlashCmdInsteadOfCat then
@@ -67,7 +82,7 @@ end
 
 function tab_addons.OnAddonClicked(index)
 
-    local addon = AddonManager.Addons[index]
+    local addon = AddonManager.GetAddonAtIndex(index)
 
     if addon.onClickScript then
         addon.onClickScript(btn)
@@ -80,13 +95,13 @@ end
 
 function tab_addons.OnAddonEntered(btn, index)
 
-    local addon = AddonManager.Addons[index]
+    local addon = AddonManager.GetAddonAtIndex(index)
     AddonManager.ShowTooltipOfAddon(btn,addon)
 end
 
 function tab_addons.OnCheckMiniBtn(index, is_checked)
 
-    local addon = AddonManager.Addons[index]
+    local addon = AddonManager.GetAddonAtIndex(index)
     if is_checked then
         for i,name in ipairs(AddonManager_UncheckedAddons) do
             if name==addon.name then
@@ -103,7 +118,7 @@ end
 
 function tab_addons.OnCheckEnableBtn(index, is_checked)
 
-    local addon = AddonManager.Addons[index]
+    local addon = AddonManager.GetAddonAtIndex(index)
     if is_checked then
         SetAddonEnabled(addon.name, true)
         addon.enableScript()

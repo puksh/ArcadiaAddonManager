@@ -521,6 +521,11 @@ function AddonManager.OnTabClicked(tab)
     current_tab.OnShow()
 end
 
+function AddonManager.Update()
+    AddonManagerFrame.page = 1
+    AddonManager.UpdateButtons()
+end
+
 function AddonManager.UpdateButtons()
     local count = current_tab.GetCount()
     Nyx.SetVisible(AddonManagerFramePageAddonsPagingBar,  count > 1)
