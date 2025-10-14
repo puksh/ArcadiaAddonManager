@@ -235,7 +235,7 @@ function tab_minimap.ShowButton(index, basename)
 
     local mapbtn = ListOfMinimapButtons()[index]
 
-    AddonManager.SetButtons(basename, GetMinimapName(mapbtn) , mapbtn:GetName(),
+    AddonManager.SetButtons(basename, GetMinimapName(mapbtn) , "",
         nil, mapbtn.GetNormalTexture and mapbtn:GetNormalTexture(),
         mapbtn:IsVisible(), nil,
         true )

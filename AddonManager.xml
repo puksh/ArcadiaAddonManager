@@ -72,9 +72,9 @@
 				</Anchors>
 				<Layers>
 					<Layer>
-						<FontString name="$parent_Name" inherits="Font_ItemButton_Desc" justifyH="LEFT" text="TEMP">
+						<FontString name="$parent_Name" inherits="Font_ItemButton_Desc" justifyH="LEFT" text="TEMP" wordwrap="true">
 							<Size>
-								<AbsDimension x="88" y="14"/>
+								<AbsDimension x="88" y="32"/>
 							</Size>
 							<Anchors>
 								<Anchor point="TOPLEFT">
@@ -84,7 +84,7 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<FontString name="$parent_Category" inherits="GameTitleFont" justifyH="LEFT" text="TEMP">
+						<FontString name="$parent_Category" inherits="GameTitleFont" justifyH="LEFT" text="TEMP" hidden="true">
 							<Size>
 								<AbsDimension x="88" y="14"/>
 							</Size>
