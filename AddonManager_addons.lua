@@ -6,19 +6,20 @@ local tab_addons = {}
 AddonManager.tabs = {}
 AddonManager.tabs[1]=tab_addons
 
-function AddonManager.GetAddonAtIndex(id)
-    local num = (AddonManagerFrame.page - 1) * DF_MAXPAGESKILL_SKILLBOOK + id
-
+function AddonManager.GetAddonAtIndex(index)
+    -- index is already the calculated position (page * items_per_page + slot)
+    -- so we don't need to recalculate it
+    
     local filter = UIDropDownMenu_GetSelectedID(AddonManagerCategoryFilter)
     if filter == 1 then  -- All
-        return AddonManager.Addons[num]
+        return AddonManager.Addons[index]
     else
         filter = AddonManager.Categories[filter - 1]
         local count = 0
         for _, addon in pairs(AddonManager.Addons) do
             if addon.category == filter then
                 count = count + 1
-                if count == num then
+                if count == index then
                     return addon
                 end
             end
@@ -57,6 +58,10 @@ end
 function tab_addons.ShowButton(index, basename)
     -- Get the addon using the filtered index
     local addon = AddonManager.GetAddonAtIndex(index)
+    if not addon then 
+        -- No addon at this index
+        return false
+    end
 
     local catname = AddonManager.L.CAT[addon.category]
     if AddonManager_Settings.ShowSlashCmdInsteadOfCat then
@@ -83,6 +88,7 @@ end
 function tab_addons.OnAddonClicked(index)
 
     local addon = AddonManager.GetAddonAtIndex(index)
+    if not addon then return end
 
     if addon.onClickScript then
         addon.onClickScript(btn)
@@ -96,12 +102,15 @@ end
 function tab_addons.OnAddonEntered(btn, index)
 
     local addon = AddonManager.GetAddonAtIndex(index)
+    if not addon then return end
+    
     AddonManager.ShowTooltipOfAddon(btn,addon)
 end
 
 function tab_addons.OnCheckMiniBtn(index, is_checked)
 
     local addon = AddonManager.GetAddonAtIndex(index)
+    if not addon then return end
     if is_checked then
         for i,name in ipairs(AddonManager_UncheckedAddons) do
             if name==addon.name then
@@ -119,6 +128,8 @@ end
 function tab_addons.OnCheckEnableBtn(index, is_checked)
 
     local addon = AddonManager.GetAddonAtIndex(index)
+    if not addon then return end
+    
     if is_checked then
         SetAddonEnabled(addon.name, true)
         addon.enableScript()
@@ -234,6 +245,10 @@ end
 function tab_minimap.ShowButton(index, basename)
 
     local mapbtn = ListOfMinimapButtons()[index]
+    if not mapbtn then 
+        -- No minimap button at this index
+        return false
+    end
 
     AddonManager.SetButtons(basename, GetMinimapName(mapbtn) , "",
         nil, mapbtn.GetNormalTexture and mapbtn:GetNormalTexture(),
@@ -243,6 +258,7 @@ end
 
 function tab_minimap.OnAddonClicked(index)
     local mapbtn = ListOfMinimapButtons()[index]
+    if not mapbtn then return end
 
     if mapbtn.__uiLuaOnClick__ then
         mapbtn.__uiLuaOnClick__(btn)
@@ -252,6 +268,7 @@ end
 function tab_minimap.OnAddonEntered(btn, index)
 
     local mapbtn = ListOfMinimapButtons()[index]
+    if not mapbtn then return end
 
     GameTooltip:ClearAllAnchors()
     GameTooltip:SetOwner(btn, "ANCHOR_RIGHT", 10, 0)
@@ -273,6 +290,8 @@ end
 
 function tab_minimap.OnCheckMiniBtn(index, is_checked)
     local mapbtn = ListOfMinimapButtons()[index]
+    if not mapbtn then return end
+    
     Nyx.SetVisible(mapbtn, is_checked)
     AddonManager_MinimapButtons[mapbtn:GetName()] = is_checked
 end

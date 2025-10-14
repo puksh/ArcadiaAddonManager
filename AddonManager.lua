@@ -537,15 +537,40 @@ end
 
 function AddonManager.UpdateButtons()
     local count = current_tab.GetCount()
-    Nyx.SetVisible(AddonManagerFramePageAddonsPagingBar,  count > 1)
+    local maxpage = math.ceil(count / DF_MAXPAGESKILL_SKILLBOOK)
+    
+    -- Only show pagination bar if there are multiple pages
+    Nyx.SetVisible(AddonManagerFramePageAddonsPagingBar, maxpage > 1)
+    
+    -- Update pagination button visibility
+    if maxpage > 1 then
+        -- Show/hide left (back) button based on current page
+        if AddonManagerFrame.page <= 1 then
+            AddonManagerFramePageAddonsPagingBarLeftPage:Hide()
+        else
+            AddonManagerFramePageAddonsPagingBarLeftPage:Show()
+        end
+        
+        -- Show/hide right (forward) button based on current page
+        if AddonManagerFrame.page >= maxpage then
+            AddonManagerFramePageAddonsPagingBarRightPage:Hide()
+        else
+            AddonManagerFramePageAddonsPagingBarRightPage:Show()
+        end
+    end
 
     for i = 1, DF_MAXPAGESKILL_SKILLBOOK do
         local index = (AddonManagerFrame.page - 1) * DF_MAXPAGESKILL_SKILLBOOK + i
         local basename = "AddonManagerAddonButton"..i
 
         if index <= count then
-            current_tab.ShowButton(index, basename)
-            _G[basename]:Show()
+            local success = current_tab.ShowButton(index, basename)
+            -- Only show the button if ShowButton successfully populated it
+            if success ~= false then
+                _G[basename]:Show()
+            else
+                _G[basename]:Hide()
+            end
         else
             _G[basename]:Hide()
         end
@@ -599,21 +624,18 @@ end
 
 function AddonManager.TurnPageBack(btn)
     AddonManagerFrame.page = AddonManagerFrame.page - 1
-    if AddonManagerFrame.page == 1 then
-        btn:Hide()
+    if AddonManagerFrame.page < 1 then
+        AddonManagerFrame.page = 1
     end
-    AddonManagerFramePageAddonsPagingBarRightPage:Show()
     AddonManager.UpdateButtons()
 end
 
 function AddonManager.TurnPageForward(btn)
-    AddonManagerFrame.page = AddonManagerFrame.page + 1
     local maxpage = math.ceil(current_tab.GetCount() / DF_MAXPAGESKILL_SKILLBOOK)
-    if AddonManagerFrame.page >= maxpage then
+    AddonManagerFrame.page = AddonManagerFrame.page + 1
+    if AddonManagerFrame.page > maxpage then
         AddonManagerFrame.page = maxpage
-        btn:Hide()
     end
-    AddonManagerFramePageAddonsPagingBarLeftPage:Show()
     AddonManager.UpdateButtons()
 end
 
