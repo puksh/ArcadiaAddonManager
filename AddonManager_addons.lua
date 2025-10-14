@@ -148,6 +148,11 @@ local FIXED_NAMES={
     ["MinimapFrameMinusButton"] = "Minimap Zoom-",
     ["MinimapFrameTopupButton"] = "Dia-Shop",
     ["AddonManagerMinimapButton"] = "AddonManager",
+    ["CE_BUTTON"] = "CombatEngine",
+    ["PetInfoStartButton"] = "PetInfo",
+    ["LB_Minimap"] = "LackBuffs",
+    ["IP2_Minimap"] = "ItemPreview2",
+    ["DL_Minimap"] = "DungeonLoots",
 }
 
 local MANUAL_FRAMES={
@@ -169,6 +174,11 @@ local MANUAL_FRAMES={
     ["SummonMyPet_Minimap"] = true,
     ["kwSpeedUpButton"] = true,
     ["afStayWithMe_Minimap_Switch"] = true,
+    ["CE_BUTTON"] = true,
+    ["PetInfoStartButton"] = true,
+    ["LB_Minimap"] = true,
+    ["IP2_Minimap"] = true,
+    ["DL_Minimap"] = true,
 
     --["ComeOnInFrame_Minimap_Shout"] = false,
     --["ComeOnInFrame_Minimap_Config"] = false,
