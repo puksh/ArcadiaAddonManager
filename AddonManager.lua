@@ -337,7 +337,7 @@ function AddonManager.VARIABLES_LOADED()
     Sol.config.SetupDropdown(AddonManagerCategoryFilter, categories, 1, 110, AddonManager.Update)
 
     PanelTemplates_IconTabInit(AddonManagerFrameTabAddons, TAB_ICON_PATH .. "addonsTab2", AddonManager.L.TAB_Addons)
-    PanelTemplates_IconTabInit(AddonManagerFrameTabMapButtons, TAB_ICON_PATH .. "minimaptab", "Minimap-Buttons")
+    PanelTemplates_IconTabInit(AddonManagerFrameTabMapButtons, TAB_ICON_PATH .. "minimaptab", AddonManager.L.TAB_MinimapButtons)
     PanelTemplates_IconTabInit(AddonManagerFrameTabSettings, TAB_ICON_PATH .. "settingsTab", AddonManager.L.TAB_Setup)
     SkillTab_SetActiveState(AddonManagerFrameTabAddons, true)
     SkillTab_SetActiveState(AddonManagerFrameTabMapButtons, false)

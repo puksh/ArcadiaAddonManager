@@ -3,11 +3,14 @@
 return {
     AnchorFrame_Addition=".\nHold CTRL to suspend docking.",
     TAB_Addons = "All Addons",
+    TAB_MinimapButtons = "Minimap Buttons",
     TAB_Setup = "Settings",
     description = "Manages your addons... You're looking at it right now ;)",
 
     But_Show="Show",
     But_Enable="Enabled",
+    
+    TIP_MinimapButton = "Minimap Button",
 
     SETTING_MainCategory = "Main",
     SETTING_MiniCategory = "Mini-Addon Bar",

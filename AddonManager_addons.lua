@@ -255,7 +255,7 @@ function tab_minimap.OnAddonEntered(btn, index)
 
     GameTooltip:ClearAllAnchors()
     GameTooltip:SetOwner(btn, "ANCHOR_RIGHT", 10, 0)
-    GameTooltip:SetText("Minibutton")
+    GameTooltip:SetText(AddonManager.L.TIP_MinimapButton)
 
     if mapbtn.__uiLuaOnMouseEnter__ then
         mapbtn.__uiLuaOnMouseEnter__(btn)
