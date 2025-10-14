@@ -639,6 +639,29 @@ function AddonManager.TurnPageForward(btn)
     AddonManager.UpdateButtons()
 end
 
+function AddonManager.OnMouseWheel(frame, delta)
+    -- Don't handle mouse wheel if tab not initialized
+    if not current_tab or not current_tab.GetCount then
+        return
+    end
+    
+    if delta and delta ~= 0 then
+        if delta > 0 then
+            -- Scroll up = previous page
+            if AddonManagerFrame.page > 1 then
+                AddonManager.TurnPageBack(frame)
+            end
+        else
+            -- Scroll down = next page
+            local count = current_tab.GetCount()
+            local maxpage = math.ceil(count / DF_MAXPAGESKILL_SKILLBOOK)
+            if AddonManagerFrame.page < maxpage then
+                AddonManager.TurnPageForward(frame)
+            end
+        end
+    end
+end
+
 function AddonManager.OnAddonClicked(btn, id)
     local index = (AddonManagerFrame.page - 1) * DF_MAXPAGESKILL_SKILLBOOK + id
     current_tab.OnAddonClicked(index)

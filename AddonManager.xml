@@ -282,7 +282,19 @@
 					</Anchor>
 				</Anchors>
 			</Button>
-			<Frame name="$parentPageAddons">
+			<Frame name="$parentPageAddons" enableMouse="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="55"/>
+						</Offset>
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
 				<Frames>
 					<Frame name="AddonManagerAddonButton1" inherits="AddonButtonTemplate" id="1">
 						<Anchors>
@@ -463,6 +475,13 @@
 						</Anchors>
 					</Frame>
 				</Frames>
+				<Scripts>
+					<OnMouseWheel>
+						if AddonManager.OnMouseWheel then
+							AddonManager.OnMouseWheel(this, delta)
+						end
+					</OnMouseWheel>
+				</Scripts>
 			</Frame>
 			<Frame name="$parentPageSettings" hidden="true">
 				<Anchors>
