@@ -580,6 +580,19 @@ end
 function AddonManager.SetButtons(basename, name, catname, icon, icontexture, minibutton, enablebutton, active)
     local categoryFrame = _G[basename.. "_AddonInfo_Category"]
     categoryFrame:SetText(catname)
+    
+    local nameFrame = _G[basename.. "_AddonInfo_Name"]
+    nameFrame:SetText(name)
+    
+    -- Show category only if there's content (used in All Addons tab, hidden in Minimap Buttons tab)
+    -- Adjust name box height accordingly
+    if catname and catname ~= "" then
+        categoryFrame:Show()
+        nameFrame:SetHeight(14)  -- Smaller height to not overlap with category
+    else
+        categoryFrame:Hide()
+        nameFrame:SetHeight(32)  -- Full height when no category
+    end
 
     local iconFrame = _G[basename.. "ItemButton"]
     if icontexture then
@@ -588,9 +601,6 @@ function AddonManager.SetButtons(basename, name, catname, icon, icontexture, min
     else
         SetItemButtonTexture(iconFrame, icon)
     end
-
-    local nameFrame = _G[basename.. "_AddonInfo_Name"]
-    nameFrame:SetText(name)
 
     local miniButtonCheck = _G[basename.. "MiniCheck"]
     local enabledCheck = _G[basename.. "EnabledCheck"]

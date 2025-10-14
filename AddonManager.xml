@@ -84,7 +84,7 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<FontString name="$parent_Category" inherits="GameTitleFont" justifyH="LEFT" text="TEMP" hidden="true">
+						<FontString name="$parent_Category" inherits="GameTitleFont" justifyH="LEFT" text="TEMP">
 							<Size>
 								<AbsDimension x="88" y="14"/>
 							</Size>
