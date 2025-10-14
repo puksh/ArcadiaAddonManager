@@ -193,27 +193,13 @@ local function ListOfMinimapButtons()
     end
 
     minimap_frames={}
-    for _,val in pairs(_G) do
-        if type(val)=="table" then
-            if val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
-                --val.groupId== 20090401 ??? then
-                table.insert(minimap_frames,val)
-            end
-        end
-    end
-
+    
+    -- Only scan frames that are explicitly in MANUAL_FRAMES
+    -- This is much faster than scanning all of _G
     for framename, add in pairs(MANUAL_FRAMES) do
         local frame = _G[framename]
-        local idx = Nyx.TableIndexOf(minimap_frames,frame)
-
-        if frame then
-            if add and not idx then
-                table.insert(minimap_frames,frame)
-            else
-                if idx then
-                    table.remove(minimap_frames,idx)
-                end
-            end
+        if frame and add then
+            table.insert(minimap_frames, frame)
         end
     end
 
@@ -243,7 +229,8 @@ function tab_minimap.GetCount()
 end
 
 function tab_minimap.OnShow()
-    minimap_frames=nil
+    -- Don't invalidate cache on every tab switch - it's too expensive
+    -- The cache will be built once and reused until UI reload
     AddonManager.UpdateButtons()
     AddonManagerFramePageAddons:Show()
 end
