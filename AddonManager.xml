@@ -520,6 +520,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("MovePassiveToBack", this:IsChecked())
+							</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_MovePassiveToBack"], nil, nil, nil, nil, true);
@@ -544,6 +547,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("ShowSlashCmdInsteadOfCat", this:IsChecked())
+							</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowSlashCmdInsteadOfCat"], nil, nil, nil, nil, true);
@@ -568,6 +574,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("CharBasedEnable", this:IsChecked())
+							</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_CharBasedEnable"], nil, nil, nil, nil, true);
@@ -606,6 +615,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("ShowMiniBar", this:IsChecked())
+							</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowMiniBar"], nil, nil, nil, nil, true);
@@ -630,6 +642,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("ShowOnlyNamesInMiniBar", this:IsChecked())
+							</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowOnlyNamesInMiniBar"], nil, nil, nil, nil, true);
@@ -654,6 +669,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+						<OnClick>
+							AddonManager.OnSettingChanged("ShowMiniBarBorder", this:IsChecked())
+						</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowMiniBarBorder"], nil, nil, nil, nil, true);
@@ -686,6 +704,9 @@
 							<OnLeave>
 								GameTooltip:Hide();
 							</OnLeave>
+							<OnClick>
+								AddonManager.OnSettingChanged("AutoHideMiniBar", this:IsChecked())
+							</OnClick>
 						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleLockMiniBar" inherits="UIPanelCheckButtonTemplate">
@@ -702,6 +723,9 @@
 							</Layer>
 						</Layers>
 						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("LockMiniBar", this:IsChecked())
+							</OnClick>
 							<OnEnter>
 								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 								GameTooltip:SetText(AddonManager.L["TOOLTIP_LockMiniBar"], nil, nil, nil, nil, true);
@@ -712,23 +736,6 @@
 							</OnLeave>
 						</Scripts>
 					</CheckButton>
-					<Button name="AddonManagerSaveSettingsButton" inherits="UIPanelButtonTemplate" text="OBJ_SAVE">
-						<Size>
-							<AbsDimension x="82" y="24"/>
-						</Size>
-						<Anchors>
-							<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
-								<Offset>
-									<AbsDimension x="-30" y="-75"/>
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<Scripts>
-							<OnClick>
-                                AddonManager.SaveSettings()
-                            </OnClick>
-						</Scripts>
-					</Button>
 				</Frames>
 			</Frame>
 		</Frames>

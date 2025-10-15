@@ -387,14 +387,37 @@ function SlashCmdList.AddonManager(cmd)
 end
 
 
-function AddonManager.SaveSettings(frame)
-    Sol.config.SaveConfig("AddonManager")
-
-    CheckDisabledState()
-    table.sort(AddonManager.Addons, AddonManager.AddonSortFn)
-    AddonManager.RecheckSettings()
-
-    AddonManager.OnShow()
+function AddonManager.OnSettingChanged(settingName, newValue)
+    -- Apply the setting change immediately
+    AddonManager_Settings[settingName] = newValue
+    
+    -- Apply specific updates based on the setting changed
+    if settingName == "ShowMiniBar" then
+        AddonManager.Mini.Show(newValue)
+    elseif settingName == "ShowOnlyNamesInMiniBar" then
+        AddonManager.Mini.UpdateState()
+    elseif settingName == "ShowMiniBarBorder" then
+        AddonManager.Mini.UpdateState()
+    elseif settingName == "AutoHideMiniBar" then
+        AddonManager.Mini.Show(AddonManager_Settings.ShowMiniBar)
+    elseif settingName == "LockMiniBar" then
+        AddonManager.Mini.UpdateState()
+    elseif settingName == "MovePassiveToBack" or settingName == "CharBasedEnable" then
+        CheckDisabledState()
+        table.sort(AddonManager.Addons, AddonManager.AddonSortFn)
+        -- Only update if current tab supports it (has GetCount function)
+        if current_tab and current_tab.GetCount then
+            AddonManager.Update()
+        end
+    elseif settingName == "ShowSlashCmdInsteadOfCat" then
+        -- Only update if current tab supports it (has GetCount function)
+        if current_tab and current_tab.GetCount then
+            AddonManager.Update()
+        end
+    end
+    
+    -- Save to persistent storage immediately
+    SaveVariables("AddonManager_Settings")
 end
 
 function AddonManager.RecheckSettings()
