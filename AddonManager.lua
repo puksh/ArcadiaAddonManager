@@ -680,7 +680,7 @@ end
 
 function AddonManager.OnAddonClicked(btn, id)
     local index = (AddonManagerFrame.page - 1) * DF_MAXPAGESKILL_SKILLBOOK + id
-    current_tab.OnAddonClicked(index)
+    current_tab.OnAddonClicked(btn, index)
 end
 
 function AddonManager.OnAddonEntered(btn, id)

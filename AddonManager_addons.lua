@@ -91,13 +91,18 @@ function tab_addons.ShowButton(index, basename)
         AddonManager.IsActive(addon) )
 end
 
-function tab_addons.OnAddonClicked(index)
+function tab_addons.OnAddonClicked(btn, index)
 
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then return end
 
     if addon.onClickScript then
-        addon.onClickScript(btn)
+        -- Pass the button frame to the addon's click script
+        -- PetInfo is currently the cause of this error
+        local success, err = pcall(addon.onClickScript, btn, index)
+        if not success then
+            DEFAULT_CHAT_FRAME:AddMessage("|cffff0000AddonManager: Error calling onClickScript for " .. tostring(addon.name) .. ": " .. tostring(err) .. "|r")
+        end
 
     elseif addon.configFrame then
         ToggleUIFrame(addon.configFrame)
@@ -259,12 +264,17 @@ function tab_minimap.ShowButton(index, basename)
         true )
 end
 
-function tab_minimap.OnAddonClicked(index)
+function tab_minimap.OnAddonClicked(btn, index)
     local mapbtn = ListOfMinimapButtons()[index]
     if not mapbtn then return end
 
     if mapbtn.__uiLuaOnClick__ then
-        mapbtn.__uiLuaOnClick__(btn)
+        -- Pass the actual minimap button, not the AddonManager button
+        -- PetInfo is currently the cause of this error
+        local success, err = pcall(mapbtn.__uiLuaOnClick__, mapbtn)
+        if not success then
+            DEFAULT_CHAT_FRAME:AddMessage("|cffff0000AddonManager: Error calling minimap button click for " .. tostring(mapbtn:GetName()) .. ": " .. tostring(err) .. "|r")
+        end
     end
 end
 
