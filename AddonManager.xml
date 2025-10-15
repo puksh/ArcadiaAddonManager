@@ -519,6 +519,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_MovePassiveToBack"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleShowSlashCmdInsteadOfCat" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
@@ -533,6 +543,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowSlashCmdInsteadOfCat"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleClassBasedEnable" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
@@ -547,6 +567,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_CharBasedEnable"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<Frame name="$parentMiniCategory">
 						<Anchors>
@@ -575,6 +605,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowMiniBar"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleShowOnlyNamesInMiniBar" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
@@ -589,6 +629,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowOnlyNamesInMiniBar"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleShowMiniBarBorder" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
@@ -603,6 +653,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowMiniBarBorder"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleAutoHideMiniBar" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
@@ -617,6 +677,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_AutoHideMiniBar"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<CheckButton name="AddonManagerConfig_ToggleLockMiniBar" inherits="UIPanelCheckButtonTemplate">
 						<Anchors>
@@ -631,6 +701,16 @@
 								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
 							</Layer>
 						</Layers>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_LockMiniBar"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
 					</CheckButton>
 					<Button name="AddonManagerSaveSettingsButton" inherits="UIPanelButtonTemplate" text="OBJ_SAVE">
 						<Size>

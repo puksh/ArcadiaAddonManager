@@ -22,6 +22,18 @@ lang["SETTING_ShowMiniBar"] = "Pokaż mini-pasek"
 lang["SETTING_ShowMiniBarBorder"] = "Pokaż obwódkę mini-paska"
 lang["SETTING_ShowOnlyNamesInMiniBar"] = "Pokazuj na mini-pasku tylko nazwy"
 lang["SETTING_ShowSlashCmdInsteadOfCat"] = "Pokazuj komendy zamiast kategorii"
+lang["SETTING_CharBasedEnable"] = "Aktywacja zależna od klasy"
+
+-- Tooltips for settings
+lang["TOOLTIP_MovePassiveToBack"] = "Gdy włączone, addony bez okna konfiguracji lub akcji po kliknięciu będą sortowane na koniec listy addonów."
+lang["TOOLTIP_ShowSlashCmdInsteadOfCat"] = "Pokazuje komendę slash dla każdego addona na liście zamiast jego kategorii."
+lang["TOOLTIP_CharBasedEnable"] = "Gdy włączone, stan aktywności/wyłączenia addonów jest zapisywany osobno dla każdej kombinacji klas. Gdy wyłączone, ustawienia są współdzielone przez wszystkie kombinacje."
+lang["TOOLTIP_ShowMiniBar"] = "Pokazuje lub ukrywa mini-pasek addonów, który zapewnia szybki dostęp do Twoich addonów."
+lang["TOOLTIP_ShowOnlyNamesInMiniBar"] = "Gdy włączone, po najechaniu na addona na mini-pasku tylko jego nazwa będzie pokazana."
+lang["TOOLTIP_ShowMiniBarBorder"] = "Pokazuje lub ukrywa dekoracyjną obwódkę wokół mini-paska."
+lang["TOOLTIP_AutoHideMiniBar"] = "Gdy włączone, mini-pasek będzie automatycznie ukrywany gdy nie jest używany i pokazywany gdy najedziesz na niego myszką."
+lang["TOOLTIP_LockMiniBar"] = "Zapobiega przesuwaniu lub zmianie pozycji mini-paska."
+
 lang["TAB_Addons"] = "Wszystkie addony"
 lang["TAB_MinimapButtons"] = "Przyciski Minimapy"
 lang["TAB_Setup"] = "Ustawienia"
