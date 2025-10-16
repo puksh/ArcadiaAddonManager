@@ -164,6 +164,7 @@ local FIXED_NAMES={
     ["LB_Minimap"] = "LackBuffs",
     ["IP2_Minimap"] = "ItemPreview2",
     ["DL_Minimap"] = "DungeonLoots",
+    ["AR_MinimapButton"] = "AutoRefine",
 }
 
 local MANUAL_FRAMES={
@@ -190,6 +191,7 @@ local MANUAL_FRAMES={
     ["LB_Minimap"] = true,
     ["IP2_Minimap"] = true,
     ["DL_Minimap"] = true,
+    ["AR_MinimapButton"] = true,
 
     --["ComeOnInFrame_Minimap_Shout"] = false,
     --["ComeOnInFrame_Minimap_Config"] = false,
