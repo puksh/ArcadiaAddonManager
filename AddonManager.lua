@@ -109,7 +109,7 @@ local function CheckDisabledState()
 
     for _, addon in pairs(AddonManager.Addons) do
 
-        if isdisabled[name] then
+        if isdisabled[addon.name] then
             if addon.disableScript and not addon.isdisabled then
                 addon.isdisabled=true
                 addon.disableScript()
@@ -119,6 +119,31 @@ local function CheckDisabledState()
                 addon.isdisabled=nil
                 addon.enableScript()
             end
+        end
+    end
+end
+
+local function CleanupOrphanedDisabledAddons()
+    -- Remove disabled addons that no longer exist from saved variables
+    for key, disabledAddons in pairs(AddonManager_DisabledAddons) do
+        local toRemove = {}
+        for addonName, _ in pairs(disabledAddons) do
+            local exists = false
+            for _, addon in pairs(AddonManager.Addons) do
+                if addon.name == addonName then
+                    exists = true
+                    break
+                end
+            end
+            if not exists then
+                table.insert(toRemove, addonName)
+            end
+        end
+        for _, addonName in ipairs(toRemove) do
+            disabledAddons[addonName] = nil
+        end
+        if next(disabledAddons) == nil then
+            AddonManager_DisabledAddons[key] = nil
         end
     end
 end
@@ -360,6 +385,7 @@ function AddonManager.VARIABLES_LOADED()
 
     AddonManager.RecheckSettings()
 
+    CleanupOrphanedDisabledAddons()
     CheckDisabledState()
 
     AddonManager.SetMinimapButtons()
