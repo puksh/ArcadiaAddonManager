@@ -236,8 +236,11 @@ local MANUAL_FRAMES={
     ["IP2_Minimap"] = true,
     ["DL_Minimap"] = true,
     ["AR_MinimapButton"] = true,
-    ["ComeOnInFrame_Minimap_Shout"] = false,
-    ["ComeOnInFrame_Minimap_Config"] = false,
+    ["ComeOnInFrame_Minimap"] = true,
+    ["ComeOnInFrame_Minimap_Start"] = true,
+    ["ComeOnInFrame_Minimap_Reload"] = true,
+    ["ComeOnInFrame_Minimap_Shout"] = true,
+    ["ComeOnInFrame_Minimap_Config"] = true,
 }
 
 local minimap_frames
@@ -287,6 +290,17 @@ end
 function tab_minimap.OnShow()
     -- Don't invalidate cache on every tab switch - it's too expensive
     -- The cache will be built once and reused until UI reload
+    -- If the number of cached minimap frames is less than the number of
+    -- manual frames we expect, invalidate the cache so newly-created
+    -- minimap buttons (like ComeOnIn's) are discovered.
+    local expected = 0
+    for _, allowed in pairs(MANUAL_FRAMES) do
+        if allowed then expected = expected + 1 end
+    end
+    if not minimap_frames or #minimap_frames < expected then
+        minimap_frames = nil
+    end
+
     AddonManager.UpdateButtons()
     AddonManagerFramePageAddons:Show()
 end
