@@ -34,7 +34,7 @@ local AddonManager = {}
 _G.AddonManager = AddonManager
 
 AddonManager.Addons = {}
-AddonManager.VERSION = "v6.0.7"
+AddonManager.VERSION = "v7.0.0"
 
 
 AddonManager.L = Nyx.LoadLocalesAuto("interface/addons/AddonManager/locales/","en")
