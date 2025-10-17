@@ -3,14 +3,38 @@ local Nyx = LibStub("Nyx")
 local AddonManager = _G.AddonManager
 local tab_addons = {}
 
+-- Ensure saved variables exist and provide defaults/migration fields
+function AddonManager.InitSavedVars()
+    AddonManager_Settings = AddonManager_Settings or {}
+    AddonManager_UncheckedAddons = AddonManager_UncheckedAddons or {}
+    AddonManager_MinimapButtons = AddonManager_MinimapButtons or {}
+
+    if type(AddonManager_Settings.version) ~= "number" then
+        AddonManager_Settings.version = 1
+    end
+
+    if AddonManager_Settings.ShowSlashCmdInsteadOfCat == nil then
+        AddonManager_Settings.ShowSlashCmdInsteadOfCat = false
+    end
+
+    if AddonManager_Settings.debug == nil then
+        AddonManager_Settings.debug = false
+    end
+end
+
+AddonManager.InitSavedVars()
+
 AddonManager.tabs = {}
 AddonManager.tabs[1]=tab_addons
 
 function AddonManager.GetAddonAtIndex(index)
     -- index is already the calculated position (page * items_per_page + slot)
     -- so we don't need to recalculate it
-    
-    local filter = UIDropDownMenu_GetSelectedID(AddonManagerCategoryFilter)
+    if type(index) ~= "number" or index < 1 then
+        return nil
+    end
+
+    local filter = UIDropDownMenu_GetSelectedID(AddonManagerCategoryFilter) or 1
     if filter == 1 then  -- All
         return AddonManager.Addons[index]
     else
@@ -56,6 +80,14 @@ function tab_addons.OnHide()
 end
 
 function tab_addons.ShowButton(index, basename)
+    -- Validate args
+    if type(index) ~= "number" or index < 1 then
+        return false
+    end
+    if basename ~= nil and type(basename) ~= "string" then
+        basename = tostring(basename)
+    end
+
     -- Get the addon using the filtered index
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then 
@@ -92,6 +124,8 @@ function tab_addons.ShowButton(index, basename)
 end
 
 function tab_addons.OnAddonClicked(btn, index)
+    if type(index) ~= "number" or index < 1 then return end
+    if not btn then return end
 
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then return end
@@ -111,14 +145,18 @@ function tab_addons.OnAddonClicked(btn, index)
 end
 
 function tab_addons.OnAddonEntered(btn, index)
+    if type(index) ~= "number" or index < 1 then return end
+    if not btn then return end
 
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then return end
-    
+
     AddonManager.ShowTooltipOfAddon(btn,addon)
 end
 
 function tab_addons.OnCheckMiniBtn(index, is_checked)
+    if type(index) ~= "number" or index < 1 then return end
+    if type(is_checked) ~= "boolean" then is_checked = not not is_checked end
 
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then return end
@@ -137,16 +175,22 @@ function tab_addons.OnCheckMiniBtn(index, is_checked)
 end
 
 function tab_addons.OnCheckEnableBtn(index, is_checked)
+    if type(index) ~= "number" or index < 1 then return end
+    if type(is_checked) ~= "boolean" then is_checked = not not is_checked end
 
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then return end
-    
+
     if is_checked then
         AddonManager.SetAddonEnabled(addon.name, true)
-        addon.enableScript()
+        if type(addon.enableScript) == "function" then
+            addon.enableScript()
+        end
     else
         AddonManager.SetAddonEnabled(addon.name, false)
-        addon.disableScript()
+        if type(addon.disableScript) == "function" then
+            addon.disableScript()
+        end
     end
 end
 
@@ -192,9 +236,8 @@ local MANUAL_FRAMES={
     ["IP2_Minimap"] = true,
     ["DL_Minimap"] = true,
     ["AR_MinimapButton"] = true,
-
-    --["ComeOnInFrame_Minimap_Shout"] = false,
-    --["ComeOnInFrame_Minimap_Config"] = false,
+    ["ComeOnInFrame_Minimap_Shout"] = false,
+    ["ComeOnInFrame_Minimap_Config"] = false,
 }
 
 local minimap_frames
