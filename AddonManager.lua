@@ -35,6 +35,7 @@ _G.AddonManager = AddonManager
 
 AddonManager.Addons = {}
 AddonManager.VERSION = "v7.0.0"
+AddonManager.DEFAULT_ICON = DEFAULT_ICON
 
 
 AddonManager.L = Nyx.LoadLocalesAuto("interface/addons/AddonManager/locales/","en")
@@ -89,6 +90,9 @@ local function GetKeyName()
 end
 
 function AddonManager.SetAddonEnabled(name, enabled)
+    if type(name) ~= "string" or name == "" then return end
+    if type(enabled) ~= "boolean" then enabled = not not enabled end
+    
     local key = GetKeyName()
     if enabled then
         if AddonManager_DisabledAddons[key] then
@@ -470,6 +474,9 @@ end
 
 -- If addonA should come before addonB in the addons list, returns true; else false
 function AddonManager.AddonSortFn(addonA, addonB)
+    if type(addonA) ~= "table" or type(addonB) ~= "table" then return false end
+    if not addonA.name or not addonB.name then return false end
+    
     if AddonManager_Settings and not AddonManager_Settings.MovePassiveToBack then
         return addonA.name:lower() < addonB.name:lower()
     else
@@ -489,19 +496,24 @@ function AddonManager.AddonSortFn(addonA, addonB)
 end
 
 function AddonManager.IsAddonDisabled(name)
+    if type(name) ~= "string" or name == "" then return false end
     local key = GetKeyName()
     return AddonManager_DisabledAddons[key] and AddonManager_DisabledAddons[key][name]
 end
 
 function AddonManager.IsActive(addon)
+    if type(addon) ~= "table" then return false end
     return addon.mini_onClickScript or addon.configFrame or addon.onClickScript
 end
 function AddonManager.HasMiniButton(addon)
+    if type(addon) ~= "table" then return false end
     return (addon.miniButton or addon.mini_icon or addon.mini_onClickScript) and AddonManager.IsActive(addon)
 end
 
 
 function AddonManager.ShowTooltipOfAddon(btn,addon)
+
+    if type(addon) ~= "table" or not addon.name then return end
 
     GameTooltip:ClearAllAnchors()
 	GameTooltip:SetOwner(btn, "ANCHOR_RIGHT", 10, 0)
@@ -633,6 +645,15 @@ function AddonManager.UpdateButtons()
 end
 
 function AddonManager.SetButtons(basename, name, catname, icon, icontexture, minibutton, enablebutton, active)
+    if type(basename) ~= "string" then return end
+    if type(name) ~= "string" then name = tostring(name or "") end
+    if type(catname) ~= "string" then catname = tostring(catname or "") end
+    if type(icon) ~= "string" then icon = AddonManager.DEFAULT_ICON end
+    -- icontexture can be nil or string
+    if type(minibutton) ~= "boolean" and type(minibutton) ~= "nil" then minibutton = nil end
+    if type(enablebutton) ~= "boolean" and type(enablebutton) ~= "nil" then enablebutton = nil end
+    if type(active) ~= "boolean" then active = false end
+    
     local categoryFrame = _G[basename.. "_AddonInfo_Category"]
     categoryFrame:SetText(catname)
     

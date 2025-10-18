@@ -318,12 +318,13 @@ function tab_minimap.ShowButton(index, basename)
     end
 
     AddonManager.SetButtons(basename, GetMinimapName(mapbtn) , "",
-        nil, mapbtn.GetNormalTexture and mapbtn:GetNormalTexture(),
+        AddonManager.DEFAULT_ICON, mapbtn.GetNormalTexture and mapbtn:GetNormalTexture(),
         mapbtn:IsVisible(), nil,
         true )
 end
 
 function tab_minimap.OnAddonClicked(btn, index)
+    if not btn then return end
     local mapbtn = ListOfMinimapButtons()[index]
     if not mapbtn then return end
 
@@ -339,6 +340,7 @@ end
 
 function tab_minimap.OnAddonEntered(btn, index)
 
+    if not btn then return end
     local mapbtn = ListOfMinimapButtons()[index]
     if not mapbtn then return end
 
@@ -361,6 +363,7 @@ function tab_minimap.OnAddonEntered(btn, index)
 end
 
 function tab_minimap.OnCheckMiniBtn(index, is_checked)
+    if not is_checked then is_checked = false end
     local mapbtn = ListOfMinimapButtons()[index]
     if not mapbtn then return end
     

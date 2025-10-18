@@ -84,6 +84,8 @@ end
 
 local temp_id=0
 function AddonManager.CreateButton(addon)
+    if type(addon) ~= "table" then return end
+    
     temp_id = temp_id +1
 
     local tempname="AddonManager_MiniBut"..temp_id
@@ -98,7 +100,7 @@ function AddonManager.CreateButton(addon)
 
 	local texture_normal = CreateUIComponent("Texture",tempname_txt1, tempname_but)
 	texture_normal:SetSize(24,24)
-	texture_normal:SetFile((addon.mini_icon or addon.icon) or DEFAULT_ICON)
+	texture_normal:SetFile((addon.mini_icon or addon.icon) or AddonManager.DEFAULT_ICON)
 
 	local texture_pushed
     if addon.mini_icon_pushed then
