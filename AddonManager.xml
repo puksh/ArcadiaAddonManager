@@ -736,6 +736,47 @@
 							</OnLeave>
 						</Scripts>
 					</CheckButton>
+					<Frame name="$parentMinimapCategory">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="AddonManagerConfig_ToggleLockMiniBar" relativePoint="TOPLEFT">
+								<Offset>
+									<AbsDimension x="0" y="35"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString inherits="AddonManagerCategoryLabelTemplate" name="$parentLabel"/>
+							</Layer>
+						</Layers>
+					</Frame>
+					<CheckButton name="AddonManagerConfig_ToggleLegacyMinimapSearch" inherits="UIPanelCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentMinimapCategory" relativePoint="TOPLEFT">
+								<Offset>
+									<AbsDimension x="0" y="25"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+								<FontString name="$parentLabel" inherits="AddonManagerLabelTemplate"/>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnClick>
+								AddonManager.OnSettingChanged("LegacyMinimapSearch", this:IsChecked())
+							</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+								GameTooltip:SetText(AddonManager.L["TOOLTIP_LegacyMinimapSearch"], nil, nil, nil, nil, true);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
 				</Frames>
 			</Frame>
 		</Frames>

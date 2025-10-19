@@ -20,6 +20,10 @@ function AddonManager.InitSavedVars()
     if AddonManager_Settings.debug == nil then
         AddonManager_Settings.debug = false
     end
+    -- Legacy minimap search scans globals for frames anchored to the minimap.
+    if AddonManager_Settings.LegacyMinimapSearch == nil then
+        AddonManager_Settings.LegacyMinimapSearch = false
+    end
 end
 
 AddonManager.InitSavedVars()
@@ -199,9 +203,23 @@ local tab_minimap = {}
 AddonManager.tabs[2]=tab_minimap
 
 local FIXED_NAMES={
+    -- COA
     ["MinimapFramePlusButton"] = "Minimap Zoom+",
     ["MinimapFrameMinusButton"] = "Minimap Zoom-",
-    ["MinimapFrameTopupButton"] = "Dia-Shop",
+    ["MinimapFrameTopupButton"] = "Diamond Shop",
+    ["MinimapNpcTrackButton"] = "World Search",
+    ["MinimapFrameWorldBossScheduleButton"] = "World Boss Schedule",
+    ["MinimapFrameStoreButton"] = "Store",
+    ["MinimapFrameBattleGroundButton"] = "Battleground",
+    ["MinimapBeautyStudioButton"] = "Beauty Studio",
+    ["MinimapFrameOptionButton"] = "Minimap Options",
+    ["MinimapFrameRestoreUIButton"] = "Reload UI",
+    ["MinimapFrameBugGatherButton"] = "UI Errors",
+    ["PlayerFrameWeekInstancesButton"] = "Mirror Instances",
+    ["PerformSaveVariablesButton"] = "Save changes",
+    ["OpenWikiButton"] = "Wiki",
+
+    -- Addons
     ["AddonManagerMinimapButton"] = "AddonManager",
     ["CE_BUTTON"] = "CombatEngine",
     ["PetInfoStartButton"] = "PetInfo",
@@ -209,10 +227,28 @@ local FIXED_NAMES={
     ["IP2_Minimap"] = "ItemPreview2",
     ["DL_Minimap"] = "DungeonLoots",
     ["AR_MinimapButton"] = "AutoRefine",
+    ["KittyMinimap"] = "KittyCombo",
+    ["Lootomatic_Minimap"] = "Lootomatic",
+    ["Helperswitch"] = "[CoA Helper] Helper",
+    ["ResetIni"] = "[InviteTool] Reset Instance",
+    ["ExitIni"] = "[InviteTool] Leave Instance",
+    ["Invite"] = "[InviteTool] Invite",
+    ["Hammerhead"] = "[CoA Helper] Remove Debuff",
+    ["ComeOnInFrame_Minimap"] = "ComeOnIn",
+    ["ComeOnInFrame_Minimap_Start"] = "[COI] Start",
+    ["ComeOnInFrame_Minimap_Reload"] = "[COI] Reload",
+    ["ComeOnInFrame_Minimap_Shout"] = "[COI] Shout",
+    ["ComeOnInFrame_Minimap_Config"] = "[COI] Config",
 }
 
+-- MANUAL_FRAMES kept for compatibility but made obsolete.
+-- Historically AddonManager only scanned frames listed here. That
+-- required manual maintenance. Newer behavior is to detect frames by
+-- known FIXED_NAMES and to scan globals for likely minimap buttons.
+-- Leave the table present so existing configs referencing it don't error,
+-- but the runtime logic below no longer depends on it.
 local MANUAL_FRAMES={
-    -- ROM
+    -- COA
     ["MinimapFrameBugGartherButton"] = false,
     ["PlayerFramePetButton"] = true,
     ["PlayerFramePartyBoardButton"] = true,
@@ -221,6 +257,17 @@ local MANUAL_FRAMES={
     ["MinimapFramePlusButton"] = true,
     ["MinimapFrameMinusButton"] = true,
     ["MinimapFrameTopupButton"] = true,
+    ["MinimapNpcTrackButton"] = true,
+    ["MinimapFrameWorldBossScheduleButton"] = true,
+    ["MinimapFrameStoreButton"] = true,
+    ["MinimapFrameBattleGroundButton"] = true,
+    ["MinimapBeautyStudioButton"] = true,
+    ["MinimapFrameOptionButton"] = true,
+    ["MinimapFrameRestoreUIButton"] = true,
+    ["MinimapFrameBugGatherButton"] = true,
+    ["PlayerFrameWeekInstancesButton"] = true,
+    ["PerformSaveVariablesButton"] = true,
+    ["OpenWikiButton"] = true,
 
     -- Addons
     ["AddonManagerMinimapButton"] = true,
@@ -237,10 +284,17 @@ local MANUAL_FRAMES={
     ["DL_Minimap"] = true,
     ["AR_MinimapButton"] = true,
     ["ComeOnInFrame_Minimap"] = true,
-    ["ComeOnInFrame_Minimap_Start"] = true,
-    ["ComeOnInFrame_Minimap_Reload"] = true,
-    ["ComeOnInFrame_Minimap_Shout"] = true,
-    ["ComeOnInFrame_Minimap_Config"] = true,
+    ["ComeOnInFrame_Minimap_Start"] = false,
+    ["ComeOnInFrame_Minimap_Reload"] = false,
+    ["ComeOnInFrame_Minimap_Shout"] = false,
+    ["ComeOnInFrame_Minimap_Config"] = false,
+    ["KittyMinimap"] = true,
+    ["Lootomatic_Minimap"] = true,
+    ["Helperswitch"] = true,
+    ["ResetIni"] = true,
+    ["ExitIni"] = true,
+    ["Invite"] = true,
+    ["Hammerhead"] = true,
 }
 
 local minimap_frames
@@ -252,13 +306,25 @@ local function ListOfMinimapButtons()
     end
 
     minimap_frames={}
-    
-    -- Only scan frames that are explicitly in MANUAL_FRAMES
-    -- This is much faster than scanning all of _G
-    for framename, add in pairs(MANUAL_FRAMES) do
+    -- Only scan frames that are explicitly in FIXED_NAMES first
+    for framename, add in pairs(FIXED_NAMES) do
         local frame = _G[framename]
         if frame and add then
             table.insert(minimap_frames, frame)
+        end
+    end
+
+    -- Optional legacy search: scan all globals for frames that use
+    -- UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap as their
+    -- UpdateAnchor function. This is powerful but historically caused
+    -- freezes in some environments, so it's guarded by a setting.
+    if AddonManager_Settings.LegacyMinimapSearch == true then
+        for _, val in pairs(_G) do
+            if type(val) == "table" then
+                if val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
+                    table.insert(minimap_frames, val)
+                end
+            end
         end
     end
 
@@ -293,10 +359,12 @@ function tab_minimap.OnShow()
     -- If the number of cached minimap frames is less than the number of
     -- manual frames we expect, invalidate the cache so newly-created
     -- minimap buttons (like ComeOnIn's) are discovered.
+    -- Previously this used MANUAL_FRAMES to compute the expected number
+    -- of frames. MANUAL_FRAMES is now obsolete; use the number of
+    -- FIXED_NAMES as a lower bound for expected frames and always
+    -- invalidate the cache if we haven't discovered at least that many.
     local expected = 0
-    for _, allowed in pairs(MANUAL_FRAMES) do
-        if allowed then expected = expected + 1 end
-    end
+    for _ in pairs(FIXED_NAMES) do expected = expected + 1 end
     if not minimap_frames or #minimap_frames < expected then
         minimap_frames = nil
     end

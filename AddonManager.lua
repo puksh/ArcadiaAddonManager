@@ -305,6 +305,7 @@ end
 local function LocalizeSettingPage()
     AddonManagerFramePageSettingsMainCategoryLabel:SetText(AddonManager.L["SETTING_MainCategory"])
     AddonManagerFramePageSettingsMiniCategoryLabel:SetText(AddonManager.L["SETTING_MiniCategory"])
+    AddonManagerFramePageSettingsMinimapCategoryLabel:SetText(AddonManager.L["TAB_MinimapButtons"])
     AddonManagerConfig_ToggleMovePassiveToBackLabel:SetText(AddonManager.L["SETTING_MovePassiveToBack"])
     AddonManagerConfig_ToggleShowSlashCmdInsteadOfCatLabel:SetText(AddonManager.L["SETTING_ShowSlashCmdInsteadOfCat"])
     AddonManagerConfig_ToggleClassBasedEnableLabel:SetText(AddonManager.L["SETTING_CharBasedEnable"])
@@ -314,6 +315,7 @@ local function LocalizeSettingPage()
     AddonManagerConfig_ToggleShowMiniBarBorderLabel:SetText(AddonManager.L["SETTING_ShowMiniBarBorder"])
     AddonManagerConfig_ToggleAutoHideMiniBarLabel:SetText(AddonManager.L["SETTING_AutoHideMiniBar"])
     AddonManagerConfig_ToggleLockMiniBarLabel:SetText(AddonManager.L["SETTING_LockMiniBar"])
+    AddonManagerConfig_ToggleLegacyMinimapSearchLabel:SetText(AddonManager.L["SETTING_LegacyMinimapSearch"])
 end
 
 function AddonManager.OnLoad(frame)
