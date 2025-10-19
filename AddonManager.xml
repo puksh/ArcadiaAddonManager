@@ -754,7 +754,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parentMinimapCategory" relativePoint="TOPLEFT">
 								<Offset>
-									<AbsDimension x="0" y="25"/>
+									<AbsDimension x="0" y="15"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
