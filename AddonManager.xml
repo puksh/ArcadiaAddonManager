@@ -234,9 +234,9 @@
 				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
-						<FontString name="$parentText" inherits="GameTitleFont" text="Addons">
+						<FontString name="$parentText" inherits="GameTitleFont" text="Addon Manager">
 							<Size>
-								<AbsDimension y="25" x="80"/>
+								<AbsDimension y="25" x="140"/>
 							</Size>
 							<Anchors>
 								<Anchor point="TOP" relativePoint="TOP">

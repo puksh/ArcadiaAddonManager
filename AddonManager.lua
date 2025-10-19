@@ -382,6 +382,12 @@ function AddonManager.VARIABLES_LOADED()
 
     AddonManager_Loaded = true
 
+    -- Update the frame title to include the addon version
+    local titleText = "AddonManager " .. tostring(AddonManager.VERSION or "")
+    if _G["AddonManagerFrameTitleFrameText"] and type(AddonManagerFrameTitleFrameText.SetText) == "function" then
+        AddonManagerFrameTitleFrameText:SetText(titleText)
+    end
+
     -- Add mini buttons now
     for _, addon in pairs(AddonManager.Addons) do
         if AddonManager.HasMiniButton(addon) then
