@@ -55,6 +55,9 @@
 		<Scripts>
 			<OnEnter>AddonManager.OnAddonEntered( _G[this:GetParent():GetName() .. "Select"], this:GetParent():GetID() )</OnEnter>
 			<OnLeave>AddonManager.OnAddonLeave( _G[this:GetParent():GetName() .. "Select"])</OnLeave>
+			<OnMouseWheel>
+				AddonManager.OnMouseWheel(AddonManagerFramePageAddons, delta)
+			</OnMouseWheel>
 		</Scripts>
 	</CheckButton>
 	<Frame name="AddonButtonTemplate" virtual="true">
@@ -137,6 +140,9 @@
 				<Scripts>
 					<OnEnter>AddonManager.OnAddonEntered( this, this:GetParent():GetID() )</OnEnter>
 					<OnLeave>AddonManager.OnAddonLeave(this)</OnLeave>
+					<OnMouseWheel>
+						AddonManager.OnMouseWheel(AddonManagerFramePageAddons, delta)
+					</OnMouseWheel>
 				</Scripts>
 			</Frame>
 			<CheckButton name="$parentMiniCheck" inherits="AddonManagerCheckBoxTemplate">
@@ -183,11 +189,17 @@
 					<OnClick>AddonManager.OnAddonClicked( this, this:GetParent():GetID() )</OnClick>
 					<OnEnter>AddonManager.OnAddonEntered(_G[this:GetParent():GetName() .. "Select"], this:GetParent():GetID())</OnEnter>
 					<OnLeave>AddonManager.OnAddonLeave(_G[this:GetParent():GetName() .. "Select"])</OnLeave>
+					<OnMouseWheel>
+						AddonManager.OnMouseWheel(AddonManagerFramePageAddons, delta)
+					</OnMouseWheel>
 				</Scripts>
 			</Button>
 		</Frames>
 		<Scripts>
 			<OnLoad>AddonManager.ButtonTemplateLoad(this)</OnLoad>
+			<OnMouseWheel>
+				AddonManager.OnMouseWheel(AddonManagerFramePageAddons, delta)
+			</OnMouseWheel>
 		</Scripts>
 	</Frame>
 	<Button name="AddonManagerTabTemplate" inherits="UIPanelTopTabTemplate" virtual="true">
