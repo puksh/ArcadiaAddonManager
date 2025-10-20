@@ -13,7 +13,7 @@ AddonManagerMini.lua
 
 AddonManager.xml
 AddonManagerMini.xml
--- X-Curse-Packaged-Version: v7.0.1
+-- X-Curse-Packaged-Version: v7.0.2
 -- X-Curse-Project-Name: AddonManager
 -- X-Curse-Project-ID: addonmanager
 -- X-Curse-Repository-ID: rom/addonmanager/mainline

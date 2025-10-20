@@ -213,7 +213,7 @@ local FIXED_NAMES={
     ["MinimapFrameBattleGroundButton"] = "Battleground",
     ["MinimapBeautyStudioButton"] = "Beauty Studio",
     ["MinimapFrameOptionButton"] = "Minimap Options",
-    ["MinimapFrameRestoreUIButton"] = "Reload UI",
+    ["MinimapFrameRestoreUIButton"] = "Restore UI Defaults",
     ["MinimapFrameBugGatherButton"] = "UI Errors",
     ["PlayerFrameWeekInstancesButton"] = "Mirror Instances",
     ["PerformSaveVariablesButton"] = "Save changes",
@@ -371,10 +371,15 @@ function tab_minimap.OnShow()
 
     AddonManager.UpdateButtons()
     AddonManagerFramePageAddons:Show()
+    -- Show the refresh button next to the category filter for the minimap tab
+    Nyx.SetVisible(AddonManagerMinimapRefreshButton, true)
+    Nyx.SetVisible(AddonManagerCategoryFilter, false)
 end
 
 function tab_minimap.OnHide()
     AddonManagerFramePageAddons:Hide()
+    Nyx.SetVisible(AddonManagerMinimapRefreshButton, false)
+    Nyx.SetVisible(AddonManagerCategoryFilter, false)
 end
 
 function tab_minimap.ShowButton(index, basename)
@@ -437,6 +442,15 @@ function tab_minimap.OnCheckMiniBtn(index, is_checked)
     
     Nyx.SetVisible(mapbtn, is_checked)
     AddonManager_MinimapButtons[mapbtn:GetName()] = is_checked
+end
+
+-- Public: Refresh the minimap buttons list (invalidate cache and update UI)
+function AddonManager.RefreshMinimapButtons()
+    -- Invalidate cached list so next lookup rebuilds it
+    minimap_frames = nil
+    AddonManager.UpdateButtons()
+    -- Ensure saved variables are persisted
+    SaveVariables("AddonManager_MinimapButtons")
 end
 
 function tab_minimap.OnCheckEnableBtn(index, is_checked)

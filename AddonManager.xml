@@ -486,6 +486,31 @@
 							</Anchor>
 						</Anchors>
 					</Frame>
+							<Button name="AddonManagerMinimapRefreshButton" inherits="UIPanelButtonTemplate" hidden="true" text="Refresh">
+								<Anchors>
+									<Anchor point="BOTTOMLEFT">
+										<Offset>
+											<AbsDimension x="23" y="-13"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Size>
+									<AbsDimension x="90" y="22"/>
+								</Size>
+								<Scripts>
+									<OnClick>
+										AddonManager.RefreshMinimapButtons()
+									</OnClick>
+									<OnEnter>
+										GameTooltip:SetOwner(this, "ANCHOR_RIGHT", 4, 0);
+										GameTooltip:SetText("Refresh Minimap Buttons", 1, 1, 1);
+										GameTooltip:Show();
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>
+								</Scripts>
+							</Button>
 				</Frames>
 				<Scripts>
 					<OnMouseWheel>

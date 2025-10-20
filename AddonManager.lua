@@ -34,7 +34,7 @@ local AddonManager = {}
 _G.AddonManager = AddonManager
 
 AddonManager.Addons = {}
-AddonManager.VERSION = "v7.0.1"
+AddonManager.VERSION = "v7.0.2"
 AddonManager.DEFAULT_ICON = DEFAULT_ICON
 
 
