@@ -152,7 +152,6 @@ local function CleanupOrphanedDisabledAddons()
     end
 end
 
--- Tooltip: Minimap tutorial (style inspired by AutoGuildDonate)
 function AddonManager.MinimapTutorial_OnEnter(this)
     if not GameTooltip or not this then return end
     GameTooltip:SetOwner(this, "ANCHOR_RIGHT", 10, 0)
@@ -169,6 +168,37 @@ end
 
 function AddonManager.MinimapTutorial_OnLeave()
     if GameTooltip then GameTooltip:Hide() end
+end
+
+
+-- Tooltip: Standard settings tooltip for checkboxes (title + description)
+-- @param frame (table) The UI element the tooltip is attached to
+-- @param description (string) The descriptive text to show under the title
+function AddonManager.ShowSettingsTooltip(frame, description)
+    if type(GameTooltip) ~= "table" or type(GameTooltip.SetOwner) ~= "function" then return end
+    if type(frame) ~= "table" then return end
+
+    GameTooltip:SetOwner(frame, "ANCHOR_RIGHT", 4, 0)
+
+    -- Derive a title from the checkbox label if available
+    local title = ""
+    local label = _G[frame:GetName() .. "Label"]
+    if type(label) == "table" and type(label.GetText) == "function" then
+        title = label:GetText() or ""
+    elseif type(frame.GetText) == "function" then
+        title = frame:GetText() or ""
+    end
+    if title == "" then title = "Settings" end
+
+    GameTooltip:SetText(title, 1, 1, 0)
+    if GameTooltip.AddSeparator then GameTooltip:AddSeparator() end
+
+    if type(description) == "string" and description ~= "" then
+        -- Body text in standard tooltip color
+        GameTooltip:AddLine(description, 1, 1, 1)
+    end
+
+    GameTooltip:Show()
 end
 
 

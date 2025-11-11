@@ -585,9 +585,7 @@
 								AddonManager.OnSettingChanged("MovePassiveToBack", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_MovePassiveToBack"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_MovePassiveToBack"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -612,9 +610,7 @@
 								AddonManager.OnSettingChanged("ShowSlashCmdInsteadOfCat", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowSlashCmdInsteadOfCat"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_ShowSlashCmdInsteadOfCat"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -639,9 +635,7 @@
 								AddonManager.OnSettingChanged("CharBasedEnable", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_CharBasedEnable"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_CharBasedEnable"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -680,9 +674,7 @@
 								AddonManager.OnSettingChanged("ShowMiniBar", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowMiniBar"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_ShowMiniBar"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -707,9 +699,7 @@
 								AddonManager.OnSettingChanged("ShowOnlyNamesInMiniBar", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowOnlyNamesInMiniBar"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_ShowOnlyNamesInMiniBar"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -734,9 +724,7 @@
 							AddonManager.OnSettingChanged("ShowMiniBarBorder", this:IsChecked())
 						</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_ShowMiniBarBorder"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_ShowMiniBarBorder"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -758,9 +746,7 @@
 						</Layers>
 						<Scripts>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_AutoHideMiniBar"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_AutoHideMiniBar"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -788,9 +774,7 @@
 								AddonManager.OnSettingChanged("LockMiniBar", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_LockMiniBar"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_LockMiniBar"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
@@ -829,9 +813,7 @@
 								AddonManager.OnSettingChanged("LegacyMinimapSearch", this:IsChecked())
 							</OnClick>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-								GameTooltip:SetText(AddonManager.L["TOOLTIP_LegacyMinimapSearch"], nil, nil, nil, nil, true);
-								GameTooltip:Show();
+								AddonManager.ShowSettingsTooltip(this, AddonManager.L["TOOLTIP_LegacyMinimapSearch"])
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide();
