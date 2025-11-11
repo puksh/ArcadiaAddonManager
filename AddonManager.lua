@@ -449,6 +449,20 @@ function AddonManager.VARIABLES_LOADED()
     CleanupOrphanedDisabledAddons()
     CheckDisabledState()
 
+    -- purge any legacy CoA-native minimap button entries from saved vars
+    if AddonManager.COA_BLACKLIST and type(AddonManager_MinimapButtons) == "table" then
+        local removed = false
+        for name in pairs(AddonManager_MinimapButtons) do
+            if AddonManager.COA_BLACKLIST[name] then
+                AddonManager_MinimapButtons[name] = nil
+                removed = true
+            end
+        end
+        if removed then
+            SaveVariables("AddonManager_MinimapButtons")
+        end
+    end
+
     AddonManager.SetMinimapButtons()
 end
 
@@ -615,19 +629,30 @@ end
 
 function AddonManager.SetMinimapButtons()
     local to_remove={}
+    local removedAny=false
     for framename,newstate in pairs(AddonManager_MinimapButtons) do
-        local frame = _G[framename]
-        local framestate = frame and frame:IsVisible()
-        if frame then
-            Nyx.SetVisible(frame, newstate)
+        -- purge any legacy CoA-native minimap button entries from saved vars
+        if AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[framename] then
+            table.insert(to_remove, framename)
+            removedAny = true
         else
-            table.insert(to_remove,framename)
+            local frame = _G[framename]
+            if frame then
+                Nyx.SetVisible(frame, newstate)
+            else
+                table.insert(to_remove, framename)
+                removedAny = true
+            end
         end
     end
 
     for _,n in ipairs(to_remove) do
 --        DEFAULT_CHAT_FRAME:AddMessage("AM: REMOVE: "..n)
         AddonManager_MinimapButtons[n]=nil
+    end
+
+    if removedAny then
+        SaveVariables("AddonManager_MinimapButtons")
     end
 end
 

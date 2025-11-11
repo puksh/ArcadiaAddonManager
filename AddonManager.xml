@@ -237,30 +237,6 @@
 			</Anchor>
 		</Anchors>
 		<Frames>
-			<!-- Minimap tutorial hint button (shown only on Minimap tab) -->
-			<Button name="AddonManagerMinimapTutorialButton" hidden="true" frameStrata="HIGH" frameLevel="10" enableMouse="true" parent="AddonManagerFrameTitleFrame">
-				<Size>
-					<AbsDimension x="22" y="22"/>
-				</Size>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="AddonManagerFrameTitleFrame" relativePoint="TOPLEFT">
-						<Offset>
-							<AbsDimension x="6" y="6"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnEnter>
-						AddonManager.MinimapTutorial_OnEnter(this)
-					</OnEnter>
-					<OnLeave>
-						AddonManager.MinimapTutorial_OnLeave(this)
-					</OnLeave>
-				</Scripts>
-				<NormalTexture file="Interface\AddOns\AddonManager\Textures\tutorial.tga"/>
-				<PushedTexture file="Interface\AddOns\AddonManager\Textures\tutorial.tga"/>
-				<HighlightTexture file="Interface\Minimap\MinimapButton_Highlight" alphaMode="ADD"/>
-			</Button>
 			<Frame name="$parentTitleFrame" inherits="UIPanelTitleFrameTemplate" frameStrata="HIGH">
 				<Size>
 					<AbsDimension x="310" y="25"/>
@@ -285,6 +261,30 @@
 					</Layer>
 				</Layers>
 			</Frame>
+			<!-- Minimap tutorial hint button (shown only on Minimap tab); parent after TitleFrame to avoid early reference -->
+			<Button name="AddonManagerMinimapTutorialButton" hidden="true" frameStrata="HIGH" frameLevel="10" enableMouse="true" parent="AddonManagerFrame">
+				<Size>
+					<AbsDimension x="22" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentTitleFrame" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="6" y="6"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						AddonManager.MinimapTutorial_OnEnter(this)
+					</OnEnter>
+					<OnLeave>
+						AddonManager.MinimapTutorial_OnLeave(this)
+					</OnLeave>
+				</Scripts>
+				<NormalTexture file="Interface\\AddOns\\AddonManager\\Textures\\tutorial.tga"/>
+				<PushedTexture file="Interface\\AddOns\\AddonManager\\Textures\\tutorial.tga"/>
+				<HighlightTexture file="Interface\\Minimap\\MinimapButton_Highlight" alphaMode="ADD"/>
+			</Button>
 			<Button name="$parentCloseButton" inherits="UIPanelCloseButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPRIGHT">

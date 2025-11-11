@@ -241,8 +241,7 @@ local FIXED_NAMES={
     ["ComeOnInFrame_Minimap_Config"] = "[COI] Config",
 }
 
--- Blacklist: Exclude CoA built-in minimap buttons from the listing
-local COA_BLACKLIST = {
+AddonManager.COA_BLACKLIST = {
     -- CoA native UI buttons (managed elsewhere in game settings)
     MinimapFramePlusButton = true,
     MinimapFrameMinusButton = true,
@@ -327,7 +326,7 @@ local function ListOfMinimapButtons()
     minimap_frames={}
     -- Only scan frames that are explicitly in FIXED_NAMES first, skipping blacklisted CoA buttons
     for framename, add in pairs(FIXED_NAMES) do
-        if not COA_BLACKLIST[framename] then
+        if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[framename]) then
             local frame = _G[framename]
             if frame and add then
                 table.insert(minimap_frames, frame)
@@ -342,7 +341,7 @@ local function ListOfMinimapButtons()
     if AddonManager_Settings.LegacyMinimapSearch == true then
         for name, val in pairs(_G) do
             if type(val) == "table" and type(name) == "string" then
-                if not COA_BLACKLIST[name] and val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
+                if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[name]) and val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
                     table.insert(minimap_frames, val)
                 end
             end
@@ -385,7 +384,7 @@ function tab_minimap.OnShow()
     -- FIXED_NAMES as a lower bound for expected frames and always
     -- invalidate the cache if we haven't discovered at least that many.
     local expected = 0
-    for k in pairs(FIXED_NAMES) do if not COA_BLACKLIST[k] then expected = expected + 1 end end
+    for k in pairs(FIXED_NAMES) do if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[k]) then expected = expected + 1 end end
     if not minimap_frames or #minimap_frames < expected then
         minimap_frames = nil
     end
@@ -463,8 +462,13 @@ function tab_minimap.OnCheckMiniBtn(index, is_checked)
     local mapbtn = ListOfMinimapButtons()[index]
     if not mapbtn then return end
     
+    local name = mapbtn:GetName()
+    -- Do not record or manipulate CoA-native buttons
+    if AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[name] then
+        return
+    end
     Nyx.SetVisible(mapbtn, is_checked)
-    AddonManager_MinimapButtons[mapbtn:GetName()] = is_checked
+    AddonManager_MinimapButtons[name] = is_checked
 end
 
 -- Public: Refresh the minimap buttons list (invalidate cache and update UI)
