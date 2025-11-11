@@ -21,7 +21,7 @@ return {
     SETTING_ShowMiniBarBorder = "Show Mini-Addon bar border",
     SETTING_AutoHideMiniBar = "Auto-hide Mini-Addon bar",
     SETTING_LockMiniBar = "Lock Mini-Addon bar in place",
-    SETTING_LegacyMinimapSearch = "Use legacy minimap scanning",
+    SETTING_LegacyMinimapSearch = "Use simple minimap scanning",
     SETTING_CharBasedEnable = "Class based 'Active'-Flag",
 
     -- Tooltips for settings
@@ -33,7 +33,7 @@ return {
     TOOLTIP_ShowMiniBarBorder = "Shows or hides the decorative border around the Mini-Addon bar.",
     TOOLTIP_AutoHideMiniBar = "When enabled, the Mini-Addon bar will automatically hide when not in use and show when you mouse over it.",
     TOOLTIP_LockMiniBar = "Prevents the Mini-Addon bar from being moved or repositioned.",
-    TOOLTIP_LegacyMinimapSearch = "Enable legacy minimap scanning (may freeze in some environments). Use only if you miss minimap buttons.",
+    TOOLTIP_LegacyMinimapSearch = "Enables simple minimap scanning. Toggle off if there are any minimap buttons missing.",
 
     TIP_CMD = "Slash command: ",
     TIP_DEVS = "Made by ",

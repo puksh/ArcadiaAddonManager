@@ -20,7 +20,7 @@ function AddonManager.InitSavedVars()
     if AddonManager_Settings.debug == nil then
         AddonManager_Settings.debug = false
     end
-    -- Legacy minimap search scans globals for frames anchored to the minimap.
+    -- LegacyMinimapSearch: true = only use FIXED_NAMES list, false = scan all globals for minimap buttons
     if AddonManager_Settings.LegacyMinimapSearch == nil then
         AddonManager_Settings.LegacyMinimapSearch = false
     end
@@ -203,26 +203,8 @@ local tab_minimap = {}
 AddonManager.tabs[2]=tab_minimap
 
 local FIXED_NAMES={
-    -- COA
-    ["MinimapFramePlusButton"] = "Minimap Zoom+",
-    ["MinimapFrameMinusButton"] = "Minimap Zoom-",
-    ["MinimapFrameTopupButton"] = "Diamond Shop",
-    ["MinimapNpcTrackButton"] = "World Search",
-    ["MinimapFrameWorldBossScheduleButton"] = "World Boss Schedule",
-    ["MinimapFrameStoreButton"] = "Store",
-    ["MinimapFrameBattleGroundButton"] = "Battleground",
-    ["MinimapBeautyStudioButton"] = "Beauty Studio",
-    ["MinimapFrameOptionButton"] = "Minimap Options",
-    ["MinimapFrameRestoreUIButton"] = "Restore UI Defaults",
-    ["MinimapFrameBugGatherButton"] = "UI Errors",
-    ["PlayerFrameWeekInstancesButton"] = "Mirror Instances",
-    ["PerformSaveVariablesButton"] = "Save changes",
-    ["OpenWikiButton"] = "Wiki",
-
-    -- Addons
     ["AddonManagerMinimapButton"] = "AddonManager",
     ["CE_BUTTON"] = "CombatEngine",
-    ["PetInfoStartButton"] = "PetInfo",
     ["LB_Minimap"] = "LackBuffs",
     ["IP2_Minimap"] = "ItemPreview2",
     ["DL_Minimap"] = "DungeonLoots",
@@ -253,103 +235,149 @@ AddonManager.COA_BLACKLIST = {
     MinimapBeautyStudioButton = true,
     MinimapFrameOptionButton = true,
     MinimapFrameRestoreUIButton = true,
-    MinimapFrameBugGatherButton = true,
     PlayerFrameWeekInstancesButton = true,
     PerformSaveVariablesButton = true,
     OpenWikiButton = true,
-}
-
--- MANUAL_FRAMES kept for compatibility but made obsolete.
--- Historically AddonManager only scanned frames listed here. That
--- required manual maintenance. Newer behavior is to detect frames by
--- known FIXED_NAMES and to scan globals for likely minimap buttons.
--- Leave the table present so existing configs referencing it don't error,
--- but the runtime logic below no longer depends on it.
-local MANUAL_FRAMES={
-    -- COA
-    ["MinimapFrameBugGartherButton"] = false,
-    ["PlayerFramePetButton"] = true,
-    ["PlayerFramePartyBoardButton"] = true,
-    ["PlayerFrameWorldBattleGroundButton"] = true,
-    ["PetBookFrameButton"] = true,
-    ["MinimapFramePlusButton"] = true,
-    ["MinimapFrameMinusButton"] = true,
-    ["MinimapFrameTopupButton"] = true,
-    ["MinimapNpcTrackButton"] = true,
-    ["MinimapFrameWorldBossScheduleButton"] = true,
-    ["MinimapFrameStoreButton"] = true,
-    ["MinimapFrameBattleGroundButton"] = true,
-    ["MinimapBeautyStudioButton"] = true,
-    ["MinimapFrameOptionButton"] = true,
-    ["MinimapFrameRestoreUIButton"] = true,
-    ["MinimapFrameBugGatherButton"] = true,
-    ["PlayerFrameWeekInstancesButton"] = true,
-    ["PerformSaveVariablesButton"] = true,
-    ["OpenWikiButton"] = true,
-
-    -- Addons
-    ["AddonManagerMinimapButton"] = true,
-    ["LootIt_MinimapButton"] = true,
-    ["Ikarus_MinimapButton"] = true,
-    ["TitleSelectMinimapButton"] = true,
-    ["SummonMyPet_Minimap"] = true,
-    ["kwSpeedUpButton"] = true,
-    ["afStayWithMe_Minimap_Switch"] = true,
-    ["CE_BUTTON"] = true,
-    ["PetInfoStartButton"] = true,
-    ["LB_Minimap"] = true,
-    ["IP2_Minimap"] = true,
-    ["DL_Minimap"] = true,
-    ["AR_MinimapButton"] = true,
-    ["ComeOnInFrame_Minimap"] = true,
-    ["ComeOnInFrame_Minimap_Start"] = false,
-    ["ComeOnInFrame_Minimap_Reload"] = false,
-    ["ComeOnInFrame_Minimap_Shout"] = false,
-    ["ComeOnInFrame_Minimap_Config"] = false,
-    ["KittyMinimap"] = true,
-    ["Lootomatic_Minimap"] = true,
-    ["Helperswitch"] = true,
-    ["ResetIni"] = true,
-    ["ExitIni"] = true,
-    ["Invite"] = true,
-    ["Hammerhead"] = true,
+    MinimapFrameBulletinButton = true,
+    MinimapFrameQuestTrackButton = true,
+    MinimapFrameBugGartherButton = true,
+    PetInfoStartButton = true,
 }
 
 local minimap_frames
 
-local function ListOfMinimapButtons()
+function AddonManager.ClearMinimapCache()
+    minimap_frames = nil
+    DEFAULT_CHAT_FRAME:AddMessage("[AddonManager] Minimap button cache cleared")
+end
 
+local function safe_GetParent(element)
+    if type(element) ~= "table" or type(element.GetParent) ~= "function" then return nil end
+    local success, parent = pcall(element.GetParent, element)
+    return (success and parent) or nil
+end
+
+local function IsFrame(value)
+    if type(value) ~= "table" then return false end
+    local mt = getmetatable(value)
+    local mtmt = getmetatable(mt)
+    if mt and mtmt and mt.GetID and mt.SetID and mtmt.GetHeight and mtmt.GetParent then
+        return true
+    end
+    return false
+end
+
+local function IsUIParentChild(frame)
+    if type(frame) ~= "table" then return false end
+    return safe_GetParent(frame) == UIParent
+end
+
+local function ListOfMinimapButtons()
     if minimap_frames then
         return minimap_frames
     end
 
-    minimap_frames={}
-    -- Only scan frames that are explicitly in FIXED_NAMES first, skipping blacklisted CoA buttons
-    for framename, add in pairs(FIXED_NAMES) do
-        if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[framename]) then
+    minimap_frames = {}
+
+    -- Seed with known buttons from FIXED_NAMES
+    for framename, include in pairs(FIXED_NAMES) do
+        if include and not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[framename]) then
             local frame = _G[framename]
-            if frame and add then
+            if frame and type(frame.GetName) == "function" then
                 table.insert(minimap_frames, frame)
             end
         end
     end
 
-    -- Optional legacy search: scan all globals for frames that use
-    -- UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap as their
-    -- UpdateAnchor function. This is powerful but historically caused
-    -- freezes in some environments, so it's guarded by a setting.
-    if AddonManager_Settings.LegacyMinimapSearch == true then
-        for name, val in pairs(_G) do
-            if type(val) == "table" and type(name) == "string" then
-                if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[name]) and val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
-                    table.insert(minimap_frames, val)
+    -- If legacy mode is OFF, do comprehensive global scan to find more buttons
+    if not AddonManager_Settings.LegacyMinimapSearch then
+        local function IsLikelyMinimapButton(frame)
+            if type(frame) ~= "table" or type(frame.GetName) ~= "function" then return false end
+            
+            local name = frame:GetName()
+            if type(name) ~= "string" then return false end
+            if AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[name] then return false end
+
+            -- Must have texture or click capability
+            local hasTex = (frame.GetNormalTexture and frame:GetNormalTexture()) or 
+                          (frame.GetHighlightTexture and frame:GetHighlightTexture()) or
+                          (frame.GetTexture and frame:GetTexture())
+            local hasClick = frame.__uiLuaOnClick__ or frame.__uiLuaOnMouseEnter__ or frame.func_OnClick or
+                            (type(frame.RegisterForClicks) == "function") or (type(frame.SetScript) == "function")
+            if not (hasTex or hasClick) then return false end
+
+            -- Size check: 10-64px
+            local w, h = 0, 0
+            if type(frame.GetWidth) == "function" then 
+                local success, width = pcall(frame.GetWidth, frame)
+                if success and type(width) == "number" then w = width end
+            end
+            if type(frame.GetHeight) == "function" then 
+                local success, height = pcall(frame.GetHeight, frame)
+                if success and type(height) == "number" then h = height end
+            end
+            if w > 0 and h > 0 and (w < 10 or h < 10 or w > 64 or h > 64) then return false end
+
+            -- Check if anchored to minimap or name suggests minimap button
+            local anchoredToMinimap = false
+            if type(frame.GetPoint) == "function" then
+                local success, point, relativeTo = pcall(frame.GetPoint, frame)
+                if success and type(relativeTo) == "table" and type(relativeTo.GetName) == "function" then
+                    local relSuccess, relName = pcall(relativeTo.GetName, relativeTo)
+                    if relSuccess and type(relName) == "string" and string.find(relName:lower(), "minimap") then
+                        anchoredToMinimap = true
+                    end
+                end
+            end
+            
+            if not anchoredToMinimap and type(frame.relativeTo) == "string" and string.find(frame.relativeTo:lower(), "minimap") then
+                anchoredToMinimap = true
+            end
+            
+            -- Name-based matching as fallback
+            local lowerName = name:lower()
+            if string.find(lowerName, "minimap") or string.find(lowerName, "_minimap") or string.find(lowerName, "minimapbutton") or
+               (string.find(lowerName, "mini") and string.find(lowerName, "button")) then
+                anchoredToMinimap = true
+            end
+
+            return anchoredToMinimap
+        end
+
+        -- Scan all globals for frames
+        local seen = {}
+        for _, f in ipairs(minimap_frames) do seen[f] = true end
+        
+        for globalName, globalValue in pairs(_G) do
+            if type(globalName) == "string" and not seen[globalValue] then
+                if IsFrame(globalValue) and IsUIParentChild(globalValue) then
+                    local success, isMinimap = pcall(IsLikelyMinimapButton, globalValue)
+                    if success and isMinimap then
+                        table.insert(minimap_frames, globalValue)
+                        seen[globalValue] = true
+                    end
+                end
+            end
+        end
+
+        -- Backup: scan UIParent children
+        if type(UIParent) == "table" and type(UIParent.GetChildren) == "function" then
+            local success, children = pcall(UIParent.GetChildren, UIParent)
+            if success and type(children) == "table" then
+                for _, child in ipairs(children) do
+                    if type(child) == "table" and child.GetName and not seen[child] then
+                        local ok, isMini = pcall(IsLikelyMinimapButton, child)
+                        if ok and isMini then
+                            table.insert(minimap_frames, child)
+                            seen[child] = true
+                        end
+                    end
                 end
             end
         end
     end
 
-    table.sort(minimap_frames, function(a,b) return a:GetName()<b:GetName() end)
-
+    table.sort(minimap_frames, function(a,b) return a:GetName() < b:GetName() end)
     return minimap_frames
 end
 
@@ -374,24 +402,31 @@ function tab_minimap.GetCount()
 end
 
 function tab_minimap.OnShow()
-    -- Don't invalidate cache on every tab switch - it's too expensive
-    -- The cache will be built once and reused until UI reload
-    -- If the number of cached minimap frames is less than the number of
-    -- manual frames we expect, invalidate the cache so newly-created
-    -- minimap buttons (like ComeOnIn's) are discovered.
-    -- Previously this used MANUAL_FRAMES to compute the expected number
-    -- of frames. MANUAL_FRAMES is now obsolete; use the number of
-    -- FIXED_NAMES as a lower bound for expected frames and always
-    -- invalidate the cache if we haven't discovered at least that many.
+    -- Check if we need to invalidate cache due to expected button count mismatch
     local expected = 0
-    for k in pairs(FIXED_NAMES) do if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[k]) then expected = expected + 1 end end
+    for k in pairs(FIXED_NAMES) do 
+        if not (AddonManager.COA_BLACKLIST and AddonManager.COA_BLACKLIST[k]) then 
+            expected = expected + 1 
+        end 
+    end
+    
+    -- Invalidate cache if button count doesn't match expectations or if scan mode was toggled
     if not minimap_frames or #minimap_frames < expected then
+        minimap_frames = nil
+    end
+    
+    -- If legacy mode is OFF and we only have FIXED_NAMES count, rescan to get more
+    if not AddonManager_Settings.LegacyMinimapSearch and minimap_frames and #minimap_frames == expected then
+        minimap_frames = nil
+    end
+    
+    -- If legacy mode is ON and we have MORE than FIXED_NAMES count, rescan to reduce
+    if AddonManager_Settings.LegacyMinimapSearch and minimap_frames and #minimap_frames > expected then
         minimap_frames = nil
     end
 
     AddonManager.UpdateButtons()
     AddonManagerFramePageAddons:Show()
-    -- Show the refresh button next to the category filter for the minimap tab
     Nyx.SetVisible(AddonManagerMinimapRefreshButton, true)
     Nyx.SetVisible(AddonManagerMinimapTutorialButton, true)
     Nyx.SetVisible(AddonManagerCategoryFilter, false)

@@ -34,7 +34,7 @@ lang["TOOLTIP_ShowOnlyNamesInMiniBar"] = "Gdy włączone, po najechaniu na addon
 lang["TOOLTIP_ShowMiniBarBorder"] = "Pokazuje lub ukrywa dekoracyjną obwódkę wokół mini-paska."
 lang["TOOLTIP_AutoHideMiniBar"] = "Gdy włączone, mini-pasek będzie automatycznie ukrywany gdy nie jest używany i pokazywany gdy najedziesz na niego myszką."
 lang["TOOLTIP_LockMiniBar"] = "Zapobiega przesuwaniu lub zmianie pozycji mini-paska."
-lang["TOOLTIP_LegacyMinimapSearch"] = "Włącza starsze skanowanie minimapy (może powodować zawieszenia). Używaj tylko jeśli brakuje przycisków minimapy."
+lang["TOOLTIP_LegacyMinimapSearch"] = "Włącza proste skanowanie minimapy. Wyłącz jeżeli brakuje niektórych przycisków minimapy."
 
 lang["TAB_Addons"] = "Wszystkie addony"
 lang["TAB_MinimapButtons"] = "Przyciski Minimapy"

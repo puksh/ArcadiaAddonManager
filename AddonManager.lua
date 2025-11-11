@@ -484,7 +484,20 @@ end
 SLASH_AddonManager1="/addonmanager"
 SLASH_AddonManager2="/addons"
 function SlashCmdList.AddonManager(cmd)
-    ToggleUIFrame(AddonManagerFrame)
+    if cmd == "debug" then
+        AddonManager_Settings.debug = not AddonManager_Settings.debug
+        local state = AddonManager_Settings.debug and "enabled" or "disabled"
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00AddonManager debug mode " .. state .. "|r")
+        SaveVariables("AddonManager_Settings")
+    elseif cmd == "refresh" then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00AddonManager: Refreshing minimap button cache...|r")
+        -- Clear the cached minimap frames list to force rescan
+        if AddonManager and AddonManager.ClearMinimapCache then
+            AddonManager.ClearMinimapCache()
+        end
+    else
+        ToggleUIFrame(AddonManagerFrame)
+    end
 end
 
 
