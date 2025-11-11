@@ -241,6 +241,25 @@ local FIXED_NAMES={
     ["ComeOnInFrame_Minimap_Config"] = "[COI] Config",
 }
 
+-- Blacklist: Exclude CoA built-in minimap buttons from the listing
+local COA_BLACKLIST = {
+    -- CoA native UI buttons (managed elsewhere in game settings)
+    MinimapFramePlusButton = true,
+    MinimapFrameMinusButton = true,
+    MinimapFrameTopupButton = true,
+    MinimapNpcTrackButton = true,
+    MinimapFrameWorldBossScheduleButton = true,
+    MinimapFrameStoreButton = true,
+    MinimapFrameBattleGroundButton = true,
+    MinimapBeautyStudioButton = true,
+    MinimapFrameOptionButton = true,
+    MinimapFrameRestoreUIButton = true,
+    MinimapFrameBugGatherButton = true,
+    PlayerFrameWeekInstancesButton = true,
+    PerformSaveVariablesButton = true,
+    OpenWikiButton = true,
+}
+
 -- MANUAL_FRAMES kept for compatibility but made obsolete.
 -- Historically AddonManager only scanned frames listed here. That
 -- required manual maintenance. Newer behavior is to detect frames by
@@ -306,11 +325,13 @@ local function ListOfMinimapButtons()
     end
 
     minimap_frames={}
-    -- Only scan frames that are explicitly in FIXED_NAMES first
+    -- Only scan frames that are explicitly in FIXED_NAMES first, skipping blacklisted CoA buttons
     for framename, add in pairs(FIXED_NAMES) do
-        local frame = _G[framename]
-        if frame and add then
-            table.insert(minimap_frames, frame)
+        if not COA_BLACKLIST[framename] then
+            local frame = _G[framename]
+            if frame and add then
+                table.insert(minimap_frames, frame)
+            end
         end
     end
 
@@ -319,9 +340,9 @@ local function ListOfMinimapButtons()
     -- UpdateAnchor function. This is powerful but historically caused
     -- freezes in some environments, so it's guarded by a setting.
     if AddonManager_Settings.LegacyMinimapSearch == true then
-        for _, val in pairs(_G) do
-            if type(val) == "table" then
-                if val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
+        for name, val in pairs(_G) do
+            if type(val) == "table" and type(name) == "string" then
+                if not COA_BLACKLIST[name] and val.func_UpdateAnchor == UIPanelAnchorFrameManager_UpdateAnchor_RelativeToMinimap then
                     table.insert(minimap_frames, val)
                 end
             end
@@ -364,7 +385,7 @@ function tab_minimap.OnShow()
     -- FIXED_NAMES as a lower bound for expected frames and always
     -- invalidate the cache if we haven't discovered at least that many.
     local expected = 0
-    for _ in pairs(FIXED_NAMES) do expected = expected + 1 end
+    for k in pairs(FIXED_NAMES) do if not COA_BLACKLIST[k] then expected = expected + 1 end end
     if not minimap_frames or #minimap_frames < expected then
         minimap_frames = nil
     end
@@ -373,12 +394,14 @@ function tab_minimap.OnShow()
     AddonManagerFramePageAddons:Show()
     -- Show the refresh button next to the category filter for the minimap tab
     Nyx.SetVisible(AddonManagerMinimapRefreshButton, true)
+    Nyx.SetVisible(AddonManagerMinimapTutorialButton, true)
     Nyx.SetVisible(AddonManagerCategoryFilter, false)
 end
 
 function tab_minimap.OnHide()
     AddonManagerFramePageAddons:Hide()
     Nyx.SetVisible(AddonManagerMinimapRefreshButton, false)
+    Nyx.SetVisible(AddonManagerMinimapTutorialButton, false)
     Nyx.SetVisible(AddonManagerCategoryFilter, false)
 end
 

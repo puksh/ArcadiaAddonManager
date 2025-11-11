@@ -152,6 +152,25 @@ local function CleanupOrphanedDisabledAddons()
     end
 end
 
+-- Tooltip: Minimap tutorial (style inspired by AutoGuildDonate)
+function AddonManager.MinimapTutorial_OnEnter(this)
+    if not GameTooltip or not this then return end
+    GameTooltip:SetOwner(this, "ANCHOR_RIGHT", 10, 0)
+    GameTooltip:SetText("Minimap Buttons", 1, 1, 0)
+    if GameTooltip.AddSeparator then GameTooltip:AddSeparator() end
+    GameTooltip:AddLine("This tab lists all buttons anchored to your minimap.", 1, 1, 1)
+    GameTooltip:AddLine("- Click an entry to trigger that button's default action.", 1, 1, 1)
+    GameTooltip:AddLine("- Use the left checkbox to show or hide it on the minimap.", 1, 1, 1)
+    if GameTooltip.AddSeparator then GameTooltip:AddSeparator() end
+    GameTooltip:AddLine("Note: CoA minimap buttons are managed under:", 0.9, 0.9, 0.9)
+    GameTooltip:AddLine("Settings → User Interface → Elements", 0, 0.75, 0.95)
+    GameTooltip:Show()
+end
+
+function AddonManager.MinimapTutorial_OnLeave()
+    if GameTooltip then GameTooltip:Hide() end
+end
+
 
 --[[
  !! OBSOLETE: use AddonManager.RegisterAddonTable instead !!
