@@ -45,6 +45,10 @@ lang["TIP_DEVS"] = "Realizado por" -- Needs review
 lang["TIP_MinimapButton"] = "Botón de Minimapa" -- Needs review
 lang["TIP_TRANSLATOR"] = "Traducido por" -- Needs review
 lang["NoCommand"] = "Sin comando" -- Needs review
+
+-- Refresh button
+lang["BTN_Refresh"] = "Actualizar" -- Needs review
+lang["TOOLTIP_Refresh"] = "Actualizar botones de minimapa" -- Needs review
 lang.CAT = {
 	Crafting = "CAT", -- Needs review
 	Development = "Desarrollo", -- Needs review

@@ -45,6 +45,10 @@ lang["TIP_DEVS"] = "제작: " -- Needs review
 lang["TIP_MinimapButton"] = "미니맵 버튼"
 lang["TIP_TRANSLATOR"] = "번역: " -- Needs review
 lang["NoCommand"] = "명령 없음"
+
+-- Refresh button
+lang["BTN_Refresh"] = "새로고침"
+lang["TOOLTIP_Refresh"] = "미니맵 버튼 새로고침"
 lang.CAT = {
 	Crafting = "제조",
 	Development = "개발",

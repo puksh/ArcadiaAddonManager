@@ -45,6 +45,10 @@ lang["TIP_DEVS"] = "Сделано " -- Needs review
 lang["TIP_MinimapButton"] = "Кнопка миникарты"
 lang["TIP_TRANSLATOR"] = "Переведено " -- Needs review
 lang["NoCommand"] = "Нет команды"
+
+-- Refresh button
+lang["BTN_Refresh"] = "Обновить"
+lang["TOOLTIP_Refresh"] = "Обновить кнопки миникарты"
 lang.CAT = {
 	Crafting = "Ремесло", -- Needs review
 	Development = "Развитие",

@@ -48,6 +48,10 @@ return {
     TIP_TRANSLATOR = "Çeviren: ",
     
     NoCommand = "Komut yok",
+    
+    -- Refresh button
+    BTN_Refresh = "Yenile",
+    TOOLTIP_Refresh = "Minimap Düğmelerini Yenile",
 
     CAT=
     {

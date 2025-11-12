@@ -46,6 +46,10 @@ lang["TIP_DEVS"] = "Entwickelt von "
 lang["TIP_MinimapButton"] = "Minimap Button"
 lang["TIP_TRANSLATOR"] = "Übersetzung von "
 lang["NoCommand"] = "Kein Befehl"
+
+-- Refresh button
+lang["BTN_Refresh"] = "Aktualisieren"
+lang["TOOLTIP_Refresh"] = "Minimap-Schaltflächen aktualisieren"
 lang.CAT = {
 	Crafting = "Berufe",
 	Development = "Entwicklung",

@@ -1,6 +1,6 @@
 --[[
 AddonManager by Alleris.
-Maintained by McBen
+Maintained by McBen and puksh
 
 AddonManager helps you keep track of your addons and provides easy ways to access them.
 
@@ -374,6 +374,8 @@ local function LocalizeSettingPage()
     AddonManagerConfig_ToggleAutoHideMiniBarLabel:SetText(AddonManager.L["SETTING_AutoHideMiniBar"])
     AddonManagerConfig_ToggleLockMiniBarLabel:SetText(AddonManager.L["SETTING_LockMiniBar"])
     AddonManagerConfig_ToggleLegacyMinimapSearchLabel:SetText(AddonManager.L["SETTING_LegacyMinimapSearch"])
+
+    AddonManagerMinimapRefreshButton:SetText(AddonManager.L["BTN_Refresh"])
 end
 
 function AddonManager.OnLoad(frame)

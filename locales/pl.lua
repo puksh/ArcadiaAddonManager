@@ -47,6 +47,10 @@ lang["TIP_MinimapButton"] = "Przycisk Minimapy"
 lang["TIP_TRANSLATOR"] = "Przetłumaczone przez "
 lang["NoCommand"] = "Brak komendy"
 
+-- Refresh button
+lang["BTN_Refresh"] = "Odśwież"
+lang["TOOLTIP_Refresh"] = "Odśwież przyciski minimapy"
+
 lang.CAT = {
 	Crafting = "Rzemiosło",
 	Development = "Zarządzanie",

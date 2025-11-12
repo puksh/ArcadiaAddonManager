@@ -510,7 +510,7 @@
 							</Anchor>
 						</Anchors>
 					</Frame>
-							<Button name="AddonManagerMinimapRefreshButton" inherits="UIPanelButtonTemplate" hidden="true" text="Refresh">
+							<Button name="AddonManagerMinimapRefreshButton" inherits="UIPanelButtonTemplate" hidden="true" text="">
 								<Anchors>
 									<Anchor point="BOTTOMLEFT">
 										<Offset>
@@ -527,7 +527,7 @@
 									</OnClick>
 									<OnEnter>
 										GameTooltip:SetOwner(this, "ANCHOR_RIGHT", 4, 0);
-										GameTooltip:SetText("Refresh Minimap Buttons", 1, 1, 1);
+										GameTooltip:SetText(AddonManager.L["TOOLTIP_Refresh"], 1, 1, 1);
 										GameTooltip:Show();
 									</OnEnter>
 									<OnLeave>

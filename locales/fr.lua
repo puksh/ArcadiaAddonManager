@@ -45,6 +45,10 @@ lang["TIP_DEVS"] = "Créer par"
 lang["TIP_MinimapButton"] = "Bouton Minimap"
 lang["TIP_TRANSLATOR"] = "Traduit par:"
 lang["NoCommand"] = "Aucune commande"
+
+-- Refresh button
+lang["BTN_Refresh"] = "Actualiser"
+lang["TOOLTIP_Refresh"] = "Actualiser les boutons de la minimap"
 lang.CAT = {
 	Crafting = "Crafting",
 	Development = "Développement",

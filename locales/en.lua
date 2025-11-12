@@ -48,6 +48,10 @@ return {
     TIP_TRANSLATOR = "Translated by ",
     
     NoCommand = "No command",
+    
+    -- Refresh button
+    BTN_Refresh = "Refresh",
+    TOOLTIP_Refresh = "Refresh Minimap Buttons",
 
     CAT=
     {
