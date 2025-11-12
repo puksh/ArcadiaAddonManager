@@ -80,47 +80,50 @@ local function FindAddon(name)
     end
 end
 
-local function GetKeyName()
-    local realm =  Nyx.GetCurrentRealm()
-    local mainClass, secondClass = "",""
-    if AddonManager_Settings.CharBasedEnable then
-        mainClass, secondClass = UnitClass("player")
+local function GetStateKey()
+    if not AddonManager_Settings.CharBasedEnable then
+        return "global"
     end
-    return string.format("%s:%s:%s",tostring(realm),tostring(mainClass),tostring(secondClass))
+    local realm = Nyx.GetCurrentRealm()
+    local mainClass = UnitClass("player") or "Unknown"
+    return realm .. "_" .. mainClass
 end
 
 function AddonManager.SetAddonEnabled(name, enabled)
     if type(name) ~= "string" or name == "" then return end
-    if type(enabled) ~= "boolean" then enabled = not not enabled end
+    enabled = enabled == true
     
-    local key = GetKeyName()
+    local key = GetStateKey()
+    AddonManager_DisabledAddons[key] = AddonManager_DisabledAddons[key] or {}
+    
     if enabled then
-        if AddonManager_DisabledAddons[key] then
-            AddonManager_DisabledAddons[key][name] = nil
-            if next(AddonManager_DisabledAddons[key])==nil then
-                AddonManager_DisabledAddons[key]=nil
-            end
+        AddonManager_DisabledAddons[key][name] = nil
+        if not next(AddonManager_DisabledAddons[key]) then
+            AddonManager_DisabledAddons[key] = nil
         end
     else
-        AddonManager_DisabledAddons[key] = AddonManager_DisabledAddons[key] or {}
-        AddonManager_DisabledAddons[key][name] =  true
+        AddonManager_DisabledAddons[key][name] = true
     end
+    
+    SaveVariablesPerCharacter("AddonManager_DisabledAddons")
 end
 
-local function CheckDisabledState()
-    local key = GetKeyName()
-    local isdisabled = AddonManager_DisabledAddons[key] or {}
+local function ApplyAddonStates()
+    local key = GetStateKey()
+    local disabledAddons = AddonManager_DisabledAddons[key] or {}
 
     for _, addon in pairs(AddonManager.Addons) do
+        local shouldBeDisabled = disabledAddons[addon.name] == true
+        local isCurrentlyDisabled = addon.isdisabled == true
 
-        if isdisabled[addon.name] then
-            if addon.disableScript and not addon.isdisabled then
-                addon.isdisabled=true
+        if shouldBeDisabled and not isCurrentlyDisabled then
+            if addon.disableScript then
+                addon.isdisabled = true
                 addon.disableScript()
             end
-        else
-            if addon.enableScript and addon.isdisabled then
-                addon.isdisabled=nil
+        elseif not shouldBeDisabled and isCurrentlyDisabled then
+            if addon.enableScript then
+                addon.isdisabled = nil
                 addon.enableScript()
             end
         end
@@ -128,10 +131,10 @@ local function CheckDisabledState()
 end
 
 local function CleanupOrphanedDisabledAddons()
-    -- Remove disabled addons that no longer exist from saved variables
+    local changed = false
     for key, disabledAddons in pairs(AddonManager_DisabledAddons) do
         local toRemove = {}
-        for addonName, _ in pairs(disabledAddons) do
+        for addonName in pairs(disabledAddons) do
             local exists = false
             for _, addon in pairs(AddonManager.Addons) do
                 if addon.name == addonName then
@@ -145,10 +148,16 @@ local function CleanupOrphanedDisabledAddons()
         end
         for _, addonName in ipairs(toRemove) do
             disabledAddons[addonName] = nil
+            changed = true
         end
-        if next(disabledAddons) == nil then
+        if not next(disabledAddons) then
             AddonManager_DisabledAddons[key] = nil
+            changed = true
         end
+    end
+    
+    if changed then
+        SaveVariablesPerCharacter("AddonManager_DisabledAddons")
     end
 end
 
@@ -345,7 +354,7 @@ function AddonManager.RegisterAddonTable(addon)
         end
 
         if AddonManager.IsAddonDisabled(addon.name) and addon.disableScript then
-            addon.isdisabled=true
+            addon.isdisabled = true
             addon.disableScript()
         end
     end
@@ -447,7 +456,7 @@ function AddonManager.VARIABLES_LOADED()
     AddonManager.RecheckSettings()
 
     CleanupOrphanedDisabledAddons()
-    CheckDisabledState()
+    ApplyAddonStates()
 
     -- purge any legacy CoA-native minimap button entries from saved vars
     if AddonManager.COA_BLACKLIST and type(AddonManager_MinimapButtons) == "table" then
@@ -477,7 +486,7 @@ function OnClick_SetMinimapVisible(this)
 end
 
 function AddonManager.UNIT_CLASS_CHANGED()
-    CheckDisabledState()
+    ApplyAddonStates()
 end
 
 
@@ -517,9 +526,8 @@ function AddonManager.OnSettingChanged(settingName, newValue)
     elseif settingName == "LockMiniBar" then
         AddonManager.Mini.UpdateState()
     elseif settingName == "MovePassiveToBack" or settingName == "CharBasedEnable" then
-        CheckDisabledState()
+        ApplyAddonStates()
         table.sort(AddonManager.Addons, AddonManager.AddonSortFn)
-        -- Only update if current tab supports it (has GetCount function)
         if current_tab and current_tab.GetCount then
             AddonManager.Update()
         end
@@ -581,8 +589,8 @@ end
 
 function AddonManager.IsAddonDisabled(name)
     if type(name) ~= "string" or name == "" then return false end
-    local key = GetKeyName()
-    return AddonManager_DisabledAddons[key] and AddonManager_DisabledAddons[key][name]
+    local key = GetStateKey()
+    return AddonManager_DisabledAddons[key] and AddonManager_DisabledAddons[key][name] == true
 end
 
 function AddonManager.IsActive(addon)

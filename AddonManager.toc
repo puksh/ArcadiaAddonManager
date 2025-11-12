@@ -1,6 +1,8 @@
 ## Title: AddonManager
 ## Notes: Addon-managing addon. Displays a list of registered addons.
 ## Author: Alleris
+## SavedVariables: AddonManager_Settings, AddonManager_UncheckedAddons, AddonManager_MinimapButtons
+## SavedVariablesPerCharacter: AddonManager_DisabledAddons
 
 Libs/LibStub.lua
 Libs/Sol.lua

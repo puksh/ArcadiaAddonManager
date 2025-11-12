@@ -180,21 +180,19 @@ end
 
 function tab_addons.OnCheckEnableBtn(index, is_checked)
     if type(index) ~= "number" or index < 1 then return end
-    if type(is_checked) ~= "boolean" then is_checked = not not is_checked end
+    is_checked = is_checked == true
 
     local addon = AddonManager.GetAddonAtIndex(index)
     if not addon then return end
 
-    if is_checked then
-        AddonManager.SetAddonEnabled(addon.name, true)
-        if type(addon.enableScript) == "function" then
-            addon.enableScript()
-        end
-    else
-        AddonManager.SetAddonEnabled(addon.name, false)
-        if type(addon.disableScript) == "function" then
-            addon.disableScript()
-        end
+    AddonManager.SetAddonEnabled(addon.name, is_checked)
+    
+    if is_checked and addon.enableScript then
+        addon.isdisabled = nil
+        addon.enableScript()
+    elseif not is_checked and addon.disableScript then
+        addon.isdisabled = true
+        addon.disableScript()
     end
 end
 
