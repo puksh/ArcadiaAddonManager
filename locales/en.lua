@@ -11,6 +11,14 @@ return {
     But_Enable="Enabled",
     
     TIP_MinimapButton = "Minimap Button",
+    
+    -- Tutorial tooltip for minimap buttons tab
+    TUTORIAL_MinimapButtons_Title = "Minimap Buttons",
+    TUTORIAL_MinimapButtons_Desc = "This tab lists all buttons anchored to your minimap.",
+    TUTORIAL_MinimapButtons_Line1 = "- Click an entry to trigger that button's default action.",
+    TUTORIAL_MinimapButtons_Line2 = "- Use the left checkbox to show or hide it on the minimap.",
+    TUTORIAL_MinimapButtons_Note = "Note: CoA minimap buttons are managed in-game:",
+    TUTORIAL_MinimapButtons_NotePath = "Settings → User Interface → Elements",
 
     SETTING_MainCategory = "Main",
     SETTING_MiniCategory = "Mini-Addon Bar",
