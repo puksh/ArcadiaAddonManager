@@ -11,6 +11,14 @@ return {
     But_Enable="Etkinleştir",
     
     TIP_MinimapButton = "Minimap Düğmesi",
+    
+    -- Tutorial tooltip for minimap buttons tab
+    TUTORIAL_MinimapButtons_Title = "Minimap Düğmeleri",
+    TUTORIAL_MinimapButtons_Desc = "Bu sekme, minimap'inize sabitlenmiş tüm düğmeleri listeler.",
+    TUTORIAL_MinimapButtons_Line1 = "- Bir girişe tıklayarak o düğmenin varsayılan eylemini tetikleyin.",
+    TUTORIAL_MinimapButtons_Line2 = "- Minimap'te göstermek veya gizlemek için sol onay kutusunu kullanın.",
+    TUTORIAL_MinimapButtons_Note = "Not: CoA minimap düğmeleri oyun içinde yönetilir:",
+    TUTORIAL_MinimapButtons_NotePath = "Ayarlar → Kullanıcı Arayüzü → Öğeler",
 
     SETTING_MainCategory = "Ana",
     SETTING_MiniCategory = "Mini-Eklenti Çubuğu",
