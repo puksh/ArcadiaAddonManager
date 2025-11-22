@@ -176,6 +176,8 @@ end
 
 function Mini.UpdateState()
     Mini.ShowIcons( AddonManagerMiniFrame:IsVisible() )
+    Nyx.SetVisible(AddonManagerMiniFrameBorder, AddonManager_Settings.ShowMiniBarBorder)
+    Nyx.SetVisible(AddonManagerMiniFrame_Corner, not AddonManager_Settings.LockMiniBar)
 end
 
 function Mini.Show(show)
