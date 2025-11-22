@@ -14,18 +14,16 @@ local CLICK_DELAY=0.5
 local show_click_delay
 local ANIM_FACTOR
 local DEFAULT_ICON = "interface/icons/reci_car_001"
+AddonManager.DEFAULT_ICON = AddonManager.DEFAULT_ICON or DEFAULT_ICON
 
 local function IsFrameValid(frame)
-    if not frame or type(frame) ~= "table" then
-        return false
-    end
-
-    local required_functions={"_uilua.lightuserdate","GetWidth","Show","Hide","IsVisible","ClearAllAnchors","SetAnchor"}
-    for _,fct in ipairs(required_functions) do
-        if not frame[fct] then return false end
-    end
-
-    return true
+    if not frame then return false end
+    local t = type(frame)
+    if t ~= "table" and t ~= "userdata" then return false end
+    return type(frame.Show)=="function"
+        and type(frame.Hide)=="function"
+        and type(frame.GetWidth)=="function"
+        and type(frame.SetAnchor)=="function"
 end
 
 AddonManager.MiniButton_OnEnter = function(btn)
@@ -100,7 +98,7 @@ function AddonManager.CreateButton(addon)
 
 	local texture_normal = CreateUIComponent("Texture",tempname_txt1, tempname_but)
 	texture_normal:SetSize(24,24)
-	texture_normal:SetFile((addon.mini_icon or addon.icon) or AddonManager.DEFAULT_ICON)
+    texture_normal:SetFile(addon.mini_icon or addon.icon or AddonManager.DEFAULT_ICON)
 
 	local texture_pushed
     if addon.mini_icon_pushed then
@@ -217,16 +215,21 @@ function Mini.StartMinimizeDelay()
 end
 
 function Mini.Minimize()
-    local res=GetListOfButtons(true)
-    ANIM_FACTOR = -#res*10/ANIM_TIME
-  	WaitTimer.Delay(0,Mini.MinimizeUpdate,"AM_MINIUP", res)
+    local res = GetListOfButtons(true)
+    local total = #res
+    if total == 0 then
+        Mini.HideMiniMenu()
+        return
+    end
+    ANIM_FACTOR = math.max(1, math.ceil(total / (ANIM_TIME * 20))) -- buttons to hide per pass
+    WaitTimer.Delay(0, Mini.MinimizeUpdate, "AM_MINIUP", res)
 end
 
 function Mini.MinimizeUpdate(btns)
-    local icons= math.min(#btns,math.max(1,ANIM_FACTOR*WaitTimer.Remaining("AM_MINIUP")))
-    for i=1,icons do
-        local btn = table.remove(btns,#btns)
-        btn:Hide()
+    local hideCount = math.min(#btns, ANIM_FACTOR)
+    for i = 1, hideCount do
+        local btn = table.remove(btns)
+        if btn then btn:Hide() end
     end
 
     Mini.LayoutIcons()
